@@ -9,8 +9,9 @@ import { SortingPage } from "../sorting-page/sorting-page";
 import { StackPage } from "../stack-page/stack-page";
 
 import "./app.css";
-
+console.log("App");
 function App() {
+  console.log("App");
   return (
     <div className="app">
       <BrowserRouter>

@@ -7,18 +7,18 @@ import styles from "./main-page.module.css";
 interface MainPageProps {
   extraClass?: string;
 }
-
+console.log("MainPage");
 export const MainPage: React.FC<MainPageProps> = ({ extraClass = "" }) => {
   return (
     <main className={`${styles.content} ${extraClass}`}>
       <div className={styles.title_box}>
         <h1 className={`text text_type_h1 text_color_h1 ${styles.title}`}>
-          МБОУ АЛГОСОШ
+          МБОУ АЛГОСОШ АЛГОСОШ АЛГОСОШ
         </h1>
         <p
           className={`text text_type_fibonacci text_color_secondary ${styles.fibonacci_title}`}
         >
-          им. Фибоначчи
+          им. Фибоначчи им. Фибоначчи им. Фибоначчи
         </p>
       </div>
       <div className={styles.cards_box}>
@@ -45,7 +45,7 @@ export const MainPage: React.FC<MainPageProps> = ({ extraClass = "" }) => {
         <p
           className={`text text_type_ticker text_color_secondary ${styles.ticker_text}`}
         >
-          Вдохновлено школами, в которых не учили алгоритмам
+          Вдохновлено школами, в которых не учили алгоритмам им. Фибоначчиим. Фибоначчиим. Фибоначчиим. Фибоначчи
         </p>
         <div className={styles.dot_box}>
           <p className={styles.dot} />
@@ -54,7 +54,7 @@ export const MainPage: React.FC<MainPageProps> = ({ extraClass = "" }) => {
       <p
         className={`text text_type_column text_color_input mt-14 ${styles.copyright}`}
       >
-        © Сделано в Практикуме.
+        © Сделано в Практикуме.им. Фибоначчиим. Фибоначчиим. Фибоначчи
       </p>
     </main>
   );

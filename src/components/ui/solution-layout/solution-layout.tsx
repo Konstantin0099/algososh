@@ -7,12 +7,13 @@ interface SolutionLayoutProps {
   title: string;
   extraClass?: string;
 }
-
+console.log("title");
 export const SolutionLayout: React.FC<SolutionLayoutProps> = ({
   extraClass = "",
   title,
   children,
 }) => {
+  console.log("title", title, children);
   return (
     <main className={`${styles.content} ${extraClass}`}>
       <div className={styles.titleBox}>

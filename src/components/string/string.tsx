@@ -12,7 +12,7 @@ export const StringComponent: React.FC = () => {
   return (
     <SolutionLayout title="Строка_Строка">
      <div className={page}>
-      dfdfdf
+     StringComponent
       <Input
       />
       <Button

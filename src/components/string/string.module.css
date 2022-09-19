@@ -1,22 +1,24 @@
 .page {
-    display: block;
-    justify-content: center;
-    width: 300px;
-    height: 200px;
-    background-color: blueviolet;
+  display: flex;
+  justify-content: center;
+  min-width: 300px;
+  background-color: rgb(183, 167, 199);
 }
 
 .input {
-    min-width: 400px;
-
+  min-width: 400px;
 }
 .string {
+  display: flex;
+  justify-content: center;
+}
+.letters {
     display: flex;
+    flex-direction: row;
     justify-content: center;
+    padding: 100px 0 0;
+    margin: 0;
 }
-.letters{
-    
-}
-.letter{
-
+.letter {
+    margin: 10px;
 }

@@ -19,47 +19,46 @@ export const StringComponent: React.FC = () => {
   const [inputString, setInputString] = useState("");
   const [arrLetters, setArrLetters] = useState<El[]>([]);
 
-const rearrange = (j: number, i: number, arr: El[]) => {
-  //console.log("arr22", j, i, arr);
-  const arrTemp = [...arr];
-  //console.log("arr[i].letter", i, arrTemp[i].letter, arrTemp);
-  const temp = arrTemp[j].letter; arrTemp[j].letter = arrTemp[i].letter; arrTemp[i].letter=temp;
-  //console.log("arr[i].letter", i, arrTemp[i].letter, arrTemp);
-  //console.log("if", ((j-1) >= 0), ((i-1) < (arr.length - 2)));
-  //if ((j-1) >= 0) {arr[j-1].state = ElementStates.Changing;}
-  //if ((i-1) < (arr.length - 2)) {arr[i+1].state = ElementStates.Changing};
-  return arrTemp;
-  //console.log("arr22--", temp, arr);
-}
+  const rearrange = (j: number, i: number, arr: El[]) => {
+    const arrTemp = [...arr];
+    const temp = arrTemp[j].letter;
+    arrTemp[j].letter = arrTemp[i].letter;
+    arrTemp[i].letter = temp;
+    return arrTemp;
+  };
 
   const rew = (j: number, i: number, arr: El[]) => {
-    const n = (arr.length) / 2;
-    console.log("rew", n, arr[j], arr[i]);
-    arr[j].state = ElementStates.Changing;
-    arr[i].state = ElementStates.Changing;
+    const n = arr.length / 2;
+    if (j <= i) {
+      arr[j].state = ElementStates.Changing;
+      arr[i].state = ElementStates.Changing;
+    }
     if (j <= n)
       setTimeout(() => {
-       console.log("if", ((j-1) >= 0), ((i-1) < (arr.length - 2)));
-      //if ((j-1) >= 0) {arr[j-1].state = ElementStates.Changing;}
-      //if ((i-1) < (arr.length - 2)) {arr[i+1].state = ElementStates.Changing};
-      // arr[j].state = ElementStates.Changing;
-      // arr[i].state = ElementStates.Changing;
-       arr = rearrange( j, i, arr);   j++; i--;
-       if ((j-1) >= 0) {arr[j-1].state = ElementStates.Changing;}
-       //if ((i-1) < (arr.length - 2)) {arr[i+1].state = ElementStates.Changing};
-       // console.log("arr22", arr);
-        rew(j,  i, arr);
+        arr = rearrange(j, i, arr);
+        j++;
+        i--;
+        rew(j, i, arr);
       }, DELAY_IN_MS);
-    else return;
-    if ((j-1) >= 0) {arr[j-1].state = ElementStates.Modified;}
-    if ((i-1) < (arr.length - 2)) {arr[i+1].state = ElementStates.Modified};
+    else {
+      if (j - 1 >= 0) {
+        arr[j - 1].state = ElementStates.Modified;
+      }
+      setArrLetters(arr);
+      return;
+    }
+    if (j - 1 >= 0) {
+      arr[j - 1].state = ElementStates.Modified;
+    }
+    if (i - 1 < arr.length - 2) {
+      arr[i + 1].state = ElementStates.Modified;
+    }
     setArrLetters(arr);
   };
   const wrapString = useMemo(
     () => (string: string) => {
       setIsLoader(true);
       setInputString(string);
-      console.log("inputString", string);
       const arrStart: El[] = [];
       const arrString: string[] = string.split("");
       for (let i = 0; i <= arrString.length - 1; i++) {
@@ -69,8 +68,6 @@ const rearrange = (j: number, i: number, arr: El[]) => {
       arrStart[arrStart.length - 1].state = ElementStates.Changing;
       setArrLetters(arrStart);
       setTimeout(() => {
-        // arrStart[0].state = ElementStates.Changing;
-        // arrStart[arrStart.length - 1].state = ElementStates.Changing;
         rew(0, arrStart.length - 1, arrStart);
       }, 2000);
     },
@@ -86,6 +83,7 @@ const rearrange = (j: number, i: number, arr: El[]) => {
     <SolutionLayout title="Строка">
       <div className={page}>
         <Input
+          extraClass={input}
           type={"text"}
           maxLength={11}
           value={inputString}
@@ -95,23 +93,17 @@ const rearrange = (j: number, i: number, arr: El[]) => {
           text="развернуть"
           isLoader={isLoader}
           disabled={false}
-          linkedList={"big"}
+          linkedList={"small"}
           onClick={() => wrapString(inputString)}
         />
       </div>
       <ul className={letters}>
         {arrLetters.map((i, index) => (
           <li key={index} className={i.letter}>
-            <Circle state={i.state} letter={i.letter} />
+            <Circle extraClass={letter} state={i.state} letter={i.letter} />
           </li>
         ))}
       </ul>
     </SolutionLayout>
   );
 };
-// {arrLetters.map((i , index) => (
-//  <li key={index} className={letter}>
-//    {i}
-//       <Circle letter={letter} />
-//     </li>
-//</SolutionLayout>    ))}

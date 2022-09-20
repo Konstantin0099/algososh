@@ -15,12 +15,13 @@ export const StringComponent: React.FC = () => {
   const wrapString = useMemo(
     () => (string: string) => {
       setIsLoader(true);
+      setInputString("");
       setArrLetters(string.split(""));
     },
     [setIsLoader, setArrLetters]
   );
   const inputChange = useMemo(
-    () => (e: any) => setInputString(e.target.value),
+    () => (e: any) => {setInputString(e.target.value)},
     [setInputString]
   );
   return (
@@ -34,7 +35,7 @@ export const StringComponent: React.FC = () => {
         />
         <Button
           text="развернуть"
-          isLoader={false}
+          isLoader={isLoader}
           disabled={false}
           linkedList={"big"}
           onClick={() => wrapString(inputString)}

@@ -9,10 +9,10 @@
   width: 490px;
   margin-right: 15px;
 }
-.string {
+/* .string {
   display: flex;
   justify-content: center;
-}
+} */
 .letters {
     display: flex;
     flex-direction: row;

@@ -6,8 +6,7 @@ import { Circle } from "../ui/circle/circle";
 import { DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
 import style from "./string.module.css";
-const { page, input, string, letters, letter } = style;
-const a = ["qwert", "tyuio", "asdfg", "ghjjk", "cbbxmvmfnvj", "hhhhhhhhh"];
+const { page, input, letters, letter } = style;
 
 interface El {
   letter: string;
@@ -16,6 +15,7 @@ interface El {
 
 export const StringComponent: React.FC = () => {
   const [isLoader, setIsLoader] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
   const [inputString, setInputString] = useState("");
   const [arrLetters, setArrLetters] = useState<El[]>([]);
 
@@ -45,6 +45,9 @@ export const StringComponent: React.FC = () => {
         arr[j - 1].state = ElementStates.Modified;
       }
       setArrLetters(arr);
+      setIsLoader(false);
+      setInputString("");
+      console.log("end");
       return;
     }
     if (j - 1 >= 0) {
@@ -58,7 +61,7 @@ export const StringComponent: React.FC = () => {
   const wrapString = useMemo(
     () => (string: string) => {
       setIsLoader(true);
-      setInputString(string);
+      setInputString("ожидайте завершения разворота");
       const arrStart: El[] = [];
       const arrString: string[] = string.split("");
       for (let i = 0; i <= arrString.length - 1; i++) {
@@ -76,6 +79,12 @@ export const StringComponent: React.FC = () => {
   const inputChange = useMemo(
     () => (e: any) => {
       setInputString(e.target.value);
+      console.log(!!e.target.value);
+      if (e.target.value) {
+        setIsDisabled(false);
+      } else {
+        setIsDisabled(true);
+      }
     },
     [setInputString]
   );
@@ -87,12 +96,13 @@ export const StringComponent: React.FC = () => {
           type={"text"}
           maxLength={11}
           value={inputString}
+          isLimitText
           onChange={inputChange}
         />
         <Button
-          text="развернуть"
+          text="Развернуть"
           isLoader={isLoader}
-          disabled={false}
+          disabled={isDisabled}
           linkedList={"small"}
           onClick={() => wrapString(inputString)}
         />

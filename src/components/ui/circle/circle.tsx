@@ -17,7 +17,7 @@ export const Circle: React.FC<CircleProps> = ({
   state = ElementStates.Default,
   letter,
   head,
-  index,
+  index = 33,
   tail,
   extraClass = "",
   isSmall,

@@ -47,7 +47,6 @@ export const StringComponent: React.FC = () => {
       setArrLetters(arr);
       setIsLoader(false);
       setInputString("");
-      console.log("end");
       return;
     }
     if (j - 1 >= 0) {
@@ -79,7 +78,6 @@ export const StringComponent: React.FC = () => {
   const inputChange = useMemo(
     () => (e: any) => {
       setInputString(e.target.value);
-      console.log(!!e.target.value);
       if (e.target.value) {
         setIsDisabled(false);
       } else {

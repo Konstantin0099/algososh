@@ -5,49 +5,63 @@ import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { DELAY_IN_MS } from "../../constants/delays";
 import style from "./fibonacci-page.module.css";
-const { page, input, numberClass, letters, letter } = style;
+const { page, input, numberClass, numbers } = style;
 
 export const FibonacciPage: React.FC = () => {
+  const [arrNumbers, setArrNumbers] = useState<number[]>([]);
   const [isLoader, setIsLoader] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [inputNumber, setInputNumber] = useState<number | string>("");
-  const [arrNumbers, setArrNumbers] = useState<number[]>([]);
 
-  const lineUp = (arr: number[], q: number | string, s: number, index: number) => {
-    console.log("lineUp - start",q , s, index);
-    arr.push(s); 
-    console.log("arr", arr);
+  const lineUp = (
+    arr: number[],
+    q: number | string,
+    s: number,
+    index: number
+  ) => {
+    arr = [...arr, s];
     setArrNumbers(arr);
-        if (index < q) {
-          let sum = arr[index - 1] + arr[index];
-          console.log("sum ", arr, index, arr[index - 1], arr[index] );
-          index++;
-      setTimeout(() => { lineUp(arr, q, sum, index)}, DELAY_IN_MS);
-    } else {setIsDisabled(false); setIsLoader(false);};
-
-    console.log("lineUp - end", arr);
+    if (index < q) {
+      let sum = arr[index - 1] + arr[index];
+      index++;
+      setTimeout(() => {
+        lineUp(arr, q, sum, index);
+      }, DELAY_IN_MS);
+    } else {
+      setIsDisabled(true);
+      setIsLoader(false);
+    }
+    setArrNumbers(arr);
   };
 
   const onClickButton = useMemo(
     () => (q: number | string) => {
-      console.log("onClickButton");
       setIsLoader(true);
-      setInputNumber("ожидайте");
       const arr: number[] = [];
-      console.log("1");
-      if ((q < 0) || (q > 19)) {return} else {arr[0] = 1;}
-      setArrNumbers(arr);
-      console.log("2", (q > 0));
-      if (q > 0) {setTimeout(() => {console.log("3"); lineUp(arr, q, 1, 1); console.log("4");}, DELAY_IN_MS);}
-
+      if (q < 0 || q > 19 || !Number.isInteger(Number(q))) {
+        setIsDisabled(true);
+        setIsLoader(false);
+        setInputNumber("ВВЕДЕНО НЕПРАВИЛЬНОЕ ЗНАЧЕНИЕ");
+        setTimeout(() => {
+          setInputNumber("");
+          return;
+        }, 3000);
+      } else {
+        arr[0] = 1;
+        if (q > 0 && q <= 19) {
+          setTimeout(() => {
+            lineUp(arr, q, 1, 1);
+          }, DELAY_IN_MS);
+        }
+        setArrNumbers(arr);
+      }
+      return;
     },
-    [setIsLoader, setArrNumbers, setInputNumber]
+    [setIsLoader, setInputNumber, setArrNumbers, lineUp]
   );
   const rememberNumber = useMemo(
     () => (e: any) => {
-      console.log("rememberNumber");
       setInputNumber(e.target.value);
-      //console.log(!!e.target.value);
       if (e.target.value) {
         setIsDisabled(false);
       } else {
@@ -61,11 +75,13 @@ export const FibonacciPage: React.FC = () => {
     <SolutionLayout title="Последовательность Фибоначчи">
       <div className={page}>
         <Input
+          placeholder="Введите число"
           extraClass={input}
-          type={"number"}
+          type="number"
           max={19}
           value={inputNumber}
           isLimitText
+          maxLength={2}
           onChange={rememberNumber}
         />
         <Button
@@ -76,10 +92,10 @@ export const FibonacciPage: React.FC = () => {
           onClick={() => onClickButton(inputNumber)}
         />
       </div>
-      <ul className={letters}>
+      <ul className={numbers}>
         {arrNumbers.map((i, index) => (
-          <li key={index}  className={numberClass}>
-            <Circle extraClass={letter} letter={i} />
+          <li key={index} className={numberClass}>
+            <Circle letter={i} index={index} />
           </li>
         ))}
       </ul>

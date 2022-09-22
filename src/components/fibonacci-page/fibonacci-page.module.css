@@ -1,25 +1,25 @@
 .page {
-    display: flex;
-    justify-content: center;
-    min-width: 300px;
-  }
-  
-  .input {
-    display: flex;
-    width: 490px;
-    margin-right: 15px;
-  }
-  .letters {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      padding: 100px 0 0;
-      margin: 10px;
-      list-style: none;
-  }
-  .letter {
-      margin: 7px;
-  }
-  .className {
-    margin: 7px;
-  }
+  display: flex;
+  justify-content: center;
+  /* min-width: 300px; */
+}
+
+.input {
+  display: flex;
+  width: 380px;
+  margin-right: 15px;
+}
+.numbers {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(min-content, 80px));
+  gap: 50px 10px;
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 50px 0 0 ;
+  list-style: none;
+}
+
+.numberClass {
+  margin: 2px;
+}

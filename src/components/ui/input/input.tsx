@@ -26,7 +26,7 @@ export const Input: React.FC<InputProps> = ({
       <input
         className={`${styles.input} text text_type_input text_color_input`}
         placeholder={placeholder}
-        type={type}
+        type="text"
         maxLength={maxLength}
         max={max}
         {...rest}

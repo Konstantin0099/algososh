@@ -10,29 +10,42 @@ const { page, input, numberClass, letters, letter } = style;
 export const FibonacciPage: React.FC = () => {
   const [isLoader, setIsLoader] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
-  const [inputNumber, setInputNumber] = useState("");
-  const [arrNumbers, setArrNumbers] = useState([]);
+  const [inputNumber, setInputNumber] = useState<number | string>("");
+  const [arrNumbers, setArrNumbers] = useState<number[]>([]);
 
-  const lineUp = (n: number, s: number, index: number) => {
-    setTimeout(() => {}, DELAY_IN_MS);
-    if (0) {
-    }
+  const lineUp = (arr: number[], q: number | string, s: number, index: number) => {
+    console.log("lineUp - start",q , s, index);
+    arr.push(s); 
+    console.log("arr", arr);
+    setArrNumbers(arr);
+        if (index < q) {
+          let sum = arr[index - 1] + arr[index];
+          console.log("sum ", arr, index, arr[index - 1], arr[index] );
+          index++;
+      setTimeout(() => { lineUp(arr, q, sum, index)}, DELAY_IN_MS);
+    } else {setIsDisabled(false); setIsLoader(false);};
 
-    console.log("lineUp - end");
+    console.log("lineUp - end", arr);
   };
 
   const onClickButton = useMemo(
-    () => (string: string) => {
+    () => (q: number | string) => {
+      console.log("onClickButton");
       setIsLoader(true);
       setInputNumber("ожидайте");
-      const arrStart: [] = [];
-      if (0) {
-      }
+      const arr: number[] = [];
+      console.log("1");
+      if ((q < 0) || (q > 19)) {return} else {arr[0] = 1;}
+      setArrNumbers(arr);
+      console.log("2", (q > 0));
+      if (q > 0) {setTimeout(() => {console.log("3"); lineUp(arr, q, 1, 1); console.log("4");}, DELAY_IN_MS);}
+
     },
     [setIsLoader, setArrNumbers, setInputNumber]
   );
   const rememberNumber = useMemo(
     () => (e: any) => {
+      console.log("rememberNumber");
       setInputNumber(e.target.value);
       //console.log(!!e.target.value);
       if (e.target.value) {
@@ -50,13 +63,13 @@ export const FibonacciPage: React.FC = () => {
         <Input
           extraClass={input}
           type={"number"}
-          maxLength={11}
+          max={19}
           value={inputNumber}
           isLimitText
           onChange={rememberNumber}
         />
         <Button
-          text="Развернуть"
+          text="Расcчитать"
           isLoader={isLoader}
           disabled={isDisabled}
           linkedList={"small"}
@@ -65,8 +78,8 @@ export const FibonacciPage: React.FC = () => {
       </div>
       <ul className={letters}>
         {arrNumbers.map((i, index) => (
-          <li key={index} className={numberClass}>
-            <Circle extraClass={letter} letter={letter} />
+          <li key={index}  className={numberClass}>
+            <Circle extraClass={letter} letter={i} />
           </li>
         ))}
       </ul>

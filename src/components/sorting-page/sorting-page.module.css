@@ -1,0 +1,29 @@
+.page {
+margin: 0 auto;
+max-width: 900px;
+}
+ .buttonsBox{
+    display: flex;
+    justify-content: space-between;
+ } 
+ .box{
+    composes: buttonsBox;
+    align-items: center;
+ }
+ .radio{
+margin: 23px;
+ }
+ .button{
+    margin: 6px;
+ }
+ .visualizedArray {
+    composes: buttonsBox;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    min-height: 360px;
+    list-style: none;
+ }
+ .elementArr{
+    margin: 5px;
+ }

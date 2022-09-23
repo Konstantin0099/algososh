@@ -4,22 +4,17 @@ import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { DELAY_IN_MS } from "../../constants/delays";
-import { ElementStates } from "../../types/element-states";
+import { ElementStates, ElementArray } from "../../types"
 import style from "./string.module.css";
 const { page, input, letters, letter } = style;
-
-interface El {
-  letter: string;
-  state: ElementStates;
-}
 
 export const StringComponent: React.FC = () => {
   const [isLoader, setIsLoader] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [inputString, setInputString] = useState("");
-  const [arrLetters, setArrLetters] = useState<El[]>([]);
+  const [arrLetters, setArrLetters] = useState<ElementArray[]>([]);
 
-  const rearrange = (j: number, i: number, arr: El[]) => {
+  const rearrange = (j: number, i: number, arr: ElementArray[]) => {
     const arrTemp = [...arr];
     const temp = arrTemp[j].letter;
     arrTemp[j].letter = arrTemp[i].letter;
@@ -27,7 +22,7 @@ export const StringComponent: React.FC = () => {
     return arrTemp;
   };
 
-  const rew = (j: number, i: number, arr: El[]) => {
+  const rew = (j: number, i: number, arr: ElementArray[]) => {
     const n = arr.length / 2;
     if (j <= i) {
       arr[j].state = ElementStates.Changing;
@@ -61,7 +56,7 @@ export const StringComponent: React.FC = () => {
     () => (string: string) => {
       setIsLoader(true);
       setInputString("ожидайте завершения разворота");
-      const arrStart: El[] = [];
+      const arrStart: ElementArray[] = [];
       const arrString: string[] = string.split("");
       for (let i = 0; i <= arrString.length - 1; i++) {
         arrStart[i] = { letter: arrString[i], state: ElementStates.Default };

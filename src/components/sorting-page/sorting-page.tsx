@@ -4,7 +4,7 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Button } from "../ui/button/button";
 import { Column } from "../ui/column/column";
 
-import { DELAY_IN_MS } from "../../constants/delays";
+import { DELAY_IN_MS, SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { ARR_CONSTANTS } from "../../constants/arr";
 import {
   ElementStates,
@@ -14,9 +14,9 @@ import {
 } from "../../types";
 import style from "./sorting-page.module.css";
 import { random } from "nanoid";
-
+// Ascending Descending generateArra
 interface ButtonState {
-  [index: string]: {
+  [name: string]: {
     isDisabled: boolean;
     isLoading?: boolean;
   };
@@ -29,11 +29,31 @@ export const SortingPage: React.FC = () => {
   const [isLoader, setIsLoader] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
   const [arrNumbers, setArrNumbers] = useState<ElementNumberArray[]>([]);
-  const [buttonState, setBattonState] = useState<ButtonState>({});
+  const [buttonState, setBattonState] = useState<ButtonState>({
+    ascending: {
+      isDisabled: false,
+      isLoading: false,
+    },
+    descending: {
+      isDisabled: false,
+      isLoading: false,
+    },
+    generateArray: {
+      isDisabled: false,
+      isLoading: false,
+    },
+  });
   const [sortingMetod, setSortingMethod] = useState<SortingMethod>(
     SortingMethod.Selection
   );
-
+  const toggleButton = (toggle: boolean) => {
+    for (let name in buttonState) {
+      buttonState[name].isDisabled = toggle;
+      !toggle && (buttonState[name].isLoading = toggle);
+      console.log(toggle, name, buttonState[name]);
+      setBattonState(buttonState);
+    }
+  };
   const randomNumber = (min: number, max: number) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
   };
@@ -47,7 +67,7 @@ export const SortingPage: React.FC = () => {
     j <= arr.length - 1 && (arr[j].state = ElementStates.Changing);
     min.indexStart + 1 < j && (arr[j - 1].state = ElementStates.Default);
     setArrNumbers([...arr]);
-  
+
     if (j <= arr.length - 1 && direction === arr[j].number < min.number) {
       min.number = arr[j].number;
       min.index = j;
@@ -64,18 +84,26 @@ export const SortingPage: React.FC = () => {
         arr[min.index].number = arr[idx].number;
         arr[idx].number = min.number;
         arr[idx].state = ElementStates.Modified;
-        if (idx >= arr.length-1) {setArrNumbers([...arr]);return;}
+        if (idx >= arr.length - 1) {
+          toggleButton(false);
+          setArrNumbers([...arr]);
+          return;
+        }
         min = {
           number: arr[idx + 1].number,
           index: idx + 1,
           indexStart: idx + 1,
         };
         min.index = idx + 1;
-        
+
         selection(arr, direction, idx + 1, min);
       } else {
         arr[idx].state = ElementStates.Modified;
-        if (idx >= arr.length-1) {setArrNumbers([...arr]);return;}
+        if (idx >= arr.length - 1) {
+          toggleButton(false);
+          setArrNumbers([...arr]);
+          return;
+        }
         min = {
           number: arr[idx + 1].number,
           index: idx + 1,
@@ -86,7 +114,50 @@ export const SortingPage: React.FC = () => {
     }
   };
 
-  const sortSelection = (
+  const bubble = (
+    arr: ElementNumberArray[],
+    direction: boolean,
+    j: number,
+    min: { indexFinish: number }
+  ) => {
+    const i = j - 1;
+    j <= min.indexFinish && (arr[j].state = ElementStates.Changing);
+    arr[i].state = ElementStates.Changing;
+    i > 0 && (arr[i - 1].state = ElementStates.Default);
+    setArrNumbers([...arr]);
+    if (j <= arr.length - 1 && direction === arr[i].number < arr[j].number) {
+      const temp = arr[i].number;
+      arr[i].number = arr[j].number;
+      arr[j].number = temp;
+      setTimeout(() => {
+        setArrNumbers([...arr]);
+      }, SHORT_DELAY_IN_MS);
+    }
+    if (j < min.indexFinish) {
+      setTimeout(() => {
+        j++;
+        bubble(arr, direction, j, min);
+      }, DELAY_IN_MS);
+    } else {
+      if (j > 1) {
+        setTimeout(() => {
+          arr[j].state = ElementStates.Modified;
+          arr[i].state = ElementStates.Default;
+          min.indexFinish--;
+          bubble(arr, direction, 1, min);
+        }, DELAY_IN_MS);
+      } else {
+        setTimeout(() => {
+          arr[j].state = ElementStates.Modified;
+          arr[i].state = ElementStates.Modified;
+          toggleButton(false);
+          setArrNumbers([...arr]);
+        }, DELAY_IN_MS);
+      }
+    }
+  };
+
+  const sort = (
     direction: boolean,
     arr: ElementNumberArray[],
     i: number,
@@ -96,11 +167,26 @@ export const SortingPage: React.FC = () => {
     arr[i].state = ElementStates.Changing;
     arr[j].state = ElementStates.Changing;
     let min = { number: arr[i].number, index: i, indexStart: i };
-    selection(arr, direction, j, min);
+    let minMax = { indexFinish: arr.length - 1 };
+    switch (sortingMetod) {
+      case SortingMethod.Selection:
+        selection(arr, direction, j, min);
+        break;
+      case SortingMethod.Bubble:
+        bubble(arr, direction, j, minMax);
+        break;
+      default:
+        break;
+    }
   };
 
   const sortArray = (direction: Direction) => {
-    sortSelection(direction === "ascending" ? true : false, arrNumbers, 0, 1);
+    toggleButton(true);
+    setBattonState({
+      ...buttonState,
+      [direction]: { ...buttonState[direction], isLoading: true },
+    });
+    sort(direction === "ascending" ? true : false, arrNumbers, 0, 1);
   };
 
   const generateArray = useMemo(
@@ -147,23 +233,23 @@ export const SortingPage: React.FC = () => {
               extraClass={button}
               text="По возрастанию"
               sorting={Direction.Ascending}
-              disabled={isDisabled}
-              isLoader={isLoader}
+              disabled={buttonState.ascending.isDisabled}
+              isLoader={buttonState.ascending.isLoading}
               onClick={() => sortArray(Direction.Ascending)}
             />
             <Button
               extraClass={button}
               text="По убыванию"
               sorting={Direction.Descending}
-              disabled={isDisabled}
-              isLoader={isLoader}
+              disabled={buttonState.descending.isDisabled}
+              isLoader={buttonState.descending.isLoading}
               onClick={() => sortArray(Direction.Descending)}
             />
           </div>
           <Button
             extraClass={button}
             text="Новый массив"
-            disabled={isDisabled}
+            disabled={buttonState.generateArray.isDisabled}
             onClick={generateArray}
           />
         </div>

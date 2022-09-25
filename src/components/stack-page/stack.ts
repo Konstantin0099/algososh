@@ -34,19 +34,16 @@ export class Stack<T> implements IStack<T> {
     this.arr = [];
   }
   push = (element: T): void => {
-      const newNode = new Node(element);
-      newNode.next = this.head;
-      this.head = newNode;
-      this.arr = [...this.arr, {value: element, state: ElementStates.Changing}]
-   };
+    const newNode = new Node(element);
+    newNode.next = this.head;
+    this.head = newNode;
+    this.arr = [...this.arr, { value: element, state: ElementStates.Changing }];
+  };
   pop = (): void => {
-    //   console.log("pop", this.arr)
-      this.head !== null && this.head.next !== null
+    this.head !== null && this.head.next !== null
       ? (this.head = this.head.next)
       : (this.head = this.head);
-      this.arr.pop();
-    //   console.log("pop", this.arr.length);
-    //   console.log("pop1", this.arr)
+    this.arr.pop();
   };
   peak = (): Node<T> | null => {
     return this.head;
@@ -57,7 +54,6 @@ export class Stack<T> implements IStack<T> {
     this.arr = [];
   };
   getSize = (): number => {
-    // console.log("getSize", this.arr.length);
     return this.arr.length;
   };
   toArray = (): ElementArray<T>[] => {

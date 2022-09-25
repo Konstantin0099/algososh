@@ -15,13 +15,7 @@ import {
 } from "../../types";
 import style from "./sorting-page.module.css";
 import { random } from "nanoid";
-// Ascending Descending generateArra
-// interface ButtonState {
-//   [name: string]: {
-//     isDisabled: boolean;
-//     isLoading?: boolean;
-//   };
-// }
+
 
 const { page, buttonsBox, box, radio, button, visualizedArray, elementArr } =
   style;
@@ -51,7 +45,6 @@ export const SortingPage: React.FC = () => {
     for (let name in buttonState) {
       buttonState[name].isDisabled = toggle;
       !toggle && (buttonState[name].isLoading = toggle);
-      console.log(toggle, name, buttonState[name]);
       setBattonState(buttonState);
     }
   };

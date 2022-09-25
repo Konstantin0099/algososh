@@ -11,16 +11,17 @@ import {
   ElementNumberArray,
   Direction,
   SortingMethod,
+  ButtonState
 } from "../../types";
 import style from "./sorting-page.module.css";
 import { random } from "nanoid";
 // Ascending Descending generateArra
-interface ButtonState {
-  [name: string]: {
-    isDisabled: boolean;
-    isLoading?: boolean;
-  };
-}
+// interface ButtonState {
+//   [name: string]: {
+//     isDisabled: boolean;
+//     isLoading?: boolean;
+//   };
+// }
 
 const { page, buttonsBox, box, radio, button, visualizedArray, elementArr } =
   style;

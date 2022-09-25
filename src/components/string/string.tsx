@@ -106,6 +106,7 @@ export const StringComponent: React.FC = () => {
             <Circle extraClass={letter} state={i.state} letter={i.letter} />
           </li>
         ))}
+        
       </ul>
     </SolutionLayout>
   );

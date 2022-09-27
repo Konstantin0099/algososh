@@ -16,6 +16,7 @@
     justify-content: center;
     padding: 100px 0 0;
     margin: 10px;
+    list-style: none;
   }
   .node {
     margin: 7px;
@@ -24,9 +25,8 @@
     margin-left: 37px;
   }
   .button {
-    padding: 0;
+    padding: 20px;
     margin-left: 10px;
-    /* margin-right: 10px; */
   }
   .nodeBox{
     display: flex;

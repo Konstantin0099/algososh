@@ -87,17 +87,6 @@ export const QueuePage: React.FC = () => {
     setHead(queue.head);
     setTail(queue.tail);
     setRenderArray([...queue.arr]);
-
-    // renderQueue();
-    // queue.clear();
-    // renderQueue();
-    // setBattonState({
-    //   add: { isDisabled: true },
-    //   del: { isDisabled: true },
-    //   clear: { isDisabled: true },
-    // });
-    // setQueue(new Queue());
-    // setRenderArray(queue.arr);
   };
 
   return (

@@ -1,28 +1,25 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { DELAY_IN_MS } from "../../constants/delays";
-import { ElementStates, ButtonState, SearchIndex } from "../../types";
+import { ElementStates, SearchIndex } from "../../types";
 import style from "./list-page.module.css";
-import { LinkedListNode, LinkedList, IList } from "./list";
+import { LinkedListNode, LinkedList } from "./list";
 import { returnArray, rndArr } from "./utils";
 
 export const ListPage: React.FC = () => {
-  const { page, input, buttonsBox, node, clear, button, nodeBox } = style;
+  const { input, buttonsBox, node, button, nodeBox, buttonInd } = style;
   const [inputValue, setInputValue] = useState("");
   const [inputIndex, setInputIndex] = useState("");
-  const [head, setHead] = useState<LinkedListNode<string> | null | undefined>(
-    new LinkedListNode(ElementStates.Default)
-  );
+
   const [searchIndexAdd, setSearchIndexAdd] = useState<SearchIndex>({});
   const [searchIndexDel, setSearchIndexDel] = useState<SearchIndex>({});
-  const [tail, setTail] = useState<LinkedListNode<string> | null | undefined>(
-    new LinkedListNode(ElementStates.Default)
-  );
+
   const [linkedList, setLinkedList] = useState(new LinkedList<string>());
   const [renderArray, setRenderArray] = useState<LinkedListNode<string>[]>([]);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [buttonState, setBattonState] = useState({
     add: {
       isDisabled: true,
@@ -30,8 +27,19 @@ export const ListPage: React.FC = () => {
     del: {
       isDisabled: false,
     },
-    clear: {
+    addByIndex: {
       isDisabled: true,
+    },
+    delByIndex: {
+      isDisabled: true,
+    },
+    isLoader: {
+      addByIndex: false,
+      delByIndex: false,
+      addToTop: false,
+      addToTail: false,
+      delFromTop: false,
+      delFromTail: false,
     },
   });
 
@@ -42,38 +50,66 @@ export const ListPage: React.FC = () => {
     node.head && setRenderArray(returnArray(node.head));
   }, [setRenderArray, setLinkedList]);
 
-  const inputChangeValue = (e: any) => {
+  const inputChangeValue = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
+
     !e.target.value &&
-      setBattonState({ ...buttonState, add: { isDisabled: true } });
+      setBattonState({
+        ...buttonState,
+        add: { isDisabled: true },
+        addByIndex: { isDisabled: true },
+      });
     e.target.value &&
-      setBattonState({ ...buttonState, add: { isDisabled: false } });
+      setBattonState({
+        ...buttonState,
+        add: { isDisabled: false },
+        addByIndex: { isDisabled: !(e.target.value && inputIndex) },
+      });
   };
-  const inputChangeIndex = (e: any) => {
+  const inputChangeIndex = (e: ChangeEvent<HTMLInputElement>) => {
     setInputIndex(e.target.value);
     !e.target.value &&
-      setBattonState({ ...buttonState, add: { isDisabled: true } });
+      setBattonState({
+        ...buttonState,
+        addByIndex: { isDisabled: true },
+        delByIndex: { isDisabled: true },
+      });
+
     e.target.value &&
-      setBattonState({ ...buttonState, add: { isDisabled: false } });
+      setBattonState({
+        ...buttonState,
+        addByIndex: { isDisabled: !(e.target.value && inputValue) },
+        delByIndex: { isDisabled: false },
+      });
   };
 
   const addToTop = (value: string) => {
+    setInputValue("");
     setSearchIndexAdd({ index: 0, value: value });
     setTimeout(() => {
       if (linkedList) {
         linkedList.addToTop(value, ElementStates.Modified);
         linkedList.head && setRenderArray(returnArray(linkedList.head));
       }
-      // console.log("1", value, linkedList)
+
       setSearchIndexAdd({});
       setTimeout(() => {
         linkedList.head && setRenderArray(returnArray(linkedList.head));
-      }, 500);
-    }, 500);
+      }, DELAY_IN_MS);
+    }, DELAY_IN_MS);
+    renderArray.length >= 2 &&
+      setBattonState({ ...buttonState, del: { isDisabled: false } });
+    setBattonState({
+      ...buttonState,
+      add: { isDisabled: true },
+      addByIndex: { isDisabled: true },
+    });
   };
 
   const addToTail = (value: string) => {
+    setInputValue("");
     setSearchIndexAdd({ index: renderArray.length - 1, value: value });
+
     setTimeout(() => {
       if (linkedList) {
         linkedList.addToTail(value, ElementStates.Modified);
@@ -82,8 +118,14 @@ export const ListPage: React.FC = () => {
       setSearchIndexAdd({});
       setTimeout(() => {
         linkedList.head && setRenderArray(returnArray(linkedList.head));
-      }, 500);
-    }, 500);
+      }, DELAY_IN_MS);
+    }, DELAY_IN_MS);
+    renderArray.length >= 1 &&
+      setBattonState({
+        ...buttonState,
+        add: { isDisabled: true },
+        addByIndex: { isDisabled: true },
+      });
   };
 
   const delFromTop = () => {
@@ -97,8 +139,11 @@ export const ListPage: React.FC = () => {
       setSearchIndexDel({});
       setTimeout(() => {
         linkedList.head && setRenderArray(returnArray(linkedList.head));
-      }, 500);
-    }, 500);
+      }, DELAY_IN_MS);
+    }, DELAY_IN_MS);
+
+    renderArray.length <= 1 &&
+      setBattonState({ ...buttonState, del: { isDisabled: true } });
   };
   const delFromTail = () => {
     let index = renderArray.length - 1;
@@ -112,9 +157,10 @@ export const ListPage: React.FC = () => {
       setSearchIndexDel({});
       setTimeout(() => {
         linkedList.head && setRenderArray(returnArray(linkedList.head));
-      }, 500);
-    }, 500);
+      }, DELAY_IN_MS);
+    }, DELAY_IN_MS);
   };
+
   const renderSearchIndex = (
     i: number,
     index: number,
@@ -123,7 +169,7 @@ export const ListPage: React.FC = () => {
     value?: string
   ) => {
     value && (searchIndex.index = i);
-    console.log("renderSearchIndex", value);
+
     i - 1 >= 0 && (renderArray[i - 1].state = ElementStates.Modified);
     setRenderArray([...renderArray]);
     if (i < index)
@@ -137,51 +183,69 @@ export const ListPage: React.FC = () => {
           }[];
           linkedList.head && (arrRender = returnArray(linkedList.head));
           setTimeout(() => {
-            console.log("arrx", arrRender);
             if (!value) {
               renderArray[i].state = ElementStates.Modified;
               searchIndex.value = renderArray[i].value;
               renderArray[i].value = "";
               searchIndex.index = i;
-              console.log(
-                "SearchIndex",
-                searchIndex.value,
-                searchIndex.index,
-                arrRender
-              );
               setRenderArray([...renderArray]);
+              setBattonState({
+                ...buttonState,
+                addByIndex: { isDisabled: true },
+                delByIndex: { isDisabled: true },
+                isLoader: { ...buttonState.isLoader, delByIndex: false },
+              });
             } else {
               set({});
               arrRender[i].state = ElementStates.Modified;
               setRenderArray([...arrRender]);
+              setBattonState({
+                ...buttonState,
+                add: { isDisabled: true },
+                addByIndex: { isDisabled: true },
+                delByIndex: { isDisabled: true },
+                isLoader: { ...buttonState.isLoader, addByIndex: false },
+              });
             }
-
-            // set({});
-          }, 300);
-          console.log("(i===index)", i, linkedList.head);
+            setIsDisabled(false);
+          }, DELAY_IN_MS / 1.5);
           setTimeout(() => {
             arrRender[i].state = ElementStates.Default;
             setRenderArray(arrRender);
             set({});
-          }, 800);
+          }, DELAY_IN_MS * 1.5);
         }
-      }, 500);
+      }, DELAY_IN_MS);
   };
 
   const addByIndex = (value: string, index: number) => {
+    setIsDisabled(true);
+    setBattonState({
+      ...buttonState,
+      addByIndex: { isDisabled: true },
+      isLoader: { ...buttonState.isLoader, addByIndex: true },
+    });
+    setInputIndex("");
+    setInputValue("");
     linkedList && linkedList.addByIndex(value, index);
     searchIndexAdd.value = value;
     renderSearchIndex(0, index, searchIndexAdd, setSearchIndexAdd, value);
   };
 
   const delByIndex = (index: number) => {
+    setIsDisabled(true);
+    setInputIndex("");
+    setBattonState({
+      ...buttonState,
+      isLoader: { ...buttonState.isLoader, delByIndex: true },
+    });
     linkedList && linkedList.delByIndex(index);
     renderSearchIndex(0, index, searchIndexDel, setSearchIndexDel);
   };
 
   return (
     <SolutionLayout title="Связный список">
-      <div className={page}>
+      <div className={buttonsBox}>
         <Input
           extraClass={input}
           type={"text"}
@@ -192,30 +256,34 @@ export const ListPage: React.FC = () => {
         />
         <Button
           text="Добавить в head"
-          disabled={buttonState.add.isDisabled}
+          isLoader={buttonState.isLoader.addToTop}
+          disabled={buttonState.add.isDisabled || isDisabled}
           onClick={() => addToTop(inputValue)}
           extraClass={button}
         />
         <Button
           text="Добавить в tail"
-          disabled={buttonState.add.isDisabled}
+          isLoader={buttonState.isLoader.addToTail}
+          disabled={buttonState.add.isDisabled || isDisabled}
           onClick={() => addToTail(inputValue)}
           extraClass={button}
         />
         <Button
           text="Удалить из head"
-          disabled={buttonState.del.isDisabled}
+          isLoader={buttonState.isLoader.delFromTop}
+          disabled={buttonState.del.isDisabled || isDisabled}
           onClick={() => delFromTop()}
           extraClass={button}
         />
         <Button
           text="Удалить из tail"
-          disabled={buttonState.del.isDisabled}
+          isLoader={buttonState.isLoader.delFromTail}
+          disabled={buttonState.del.isDisabled || isDisabled}
           onClick={() => delFromTail()}
           extraClass={button}
         />
       </div>
-      <div className={page}>
+      <div className={buttonsBox}>
         <Input
           extraClass={input}
           type={"text"}
@@ -226,15 +294,17 @@ export const ListPage: React.FC = () => {
         />
         <Button
           text="Добавить по индексу"
-          disabled={buttonState.add.isDisabled}
+          isLoader={buttonState.isLoader.addByIndex}
+          disabled={buttonState.addByIndex.isDisabled || isDisabled}
           onClick={() => addByIndex(inputValue, Number(inputIndex))}
-          extraClass={button}
+          extraClass={buttonInd}
         />
         <Button
           text="Удалить по индексу"
-          disabled={buttonState.del.isDisabled}
+          isLoader={buttonState.isLoader.delByIndex}
+          disabled={buttonState.delByIndex.isDisabled || isDisabled}
           onClick={() => delByIndex(Number(inputIndex))}
-          extraClass={button}
+          extraClass={buttonInd}
         />
       </div>
       <ul className={nodeBox}>

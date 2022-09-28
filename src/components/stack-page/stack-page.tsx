@@ -9,7 +9,7 @@ import style from "./stack-page.module.css";
 import { Stack, ElementArray, Node } from "./stack";
 
 export const StackPage: React.FC = () => {
-  const { page, input, buttonsBox, node, clear, button, nodeBox } = style;
+  const { page, input, node, clear, button, nodeBox } = style;
   const [inputValue, setInputValue] = useState("");
   const [renderArray, setrenderArray] = useState<ElementArray<string>[] | []>(
     []

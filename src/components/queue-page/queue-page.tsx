@@ -9,7 +9,7 @@ import style from "./queue-page.module.css";
 import { Queue, ElementArray, IQueue } from "./queue";
 
 export const QueuePage: React.FC = () => {
-  const { page, input, buttonsBox, node, clear, button, nodeBox } = style;
+  const { page, input, node, clear, button, nodeBox } = style;
   const [inputValue, setInputValue] = useState("");
   const [head, setHead] = useState<number | null>(null);
   const [tail, setTail] = useState<number | null>(null);
@@ -30,7 +30,6 @@ export const QueuePage: React.FC = () => {
   });
   useEffect(() => {
     setQueue(new Queue());
-    // console.log("useEffect", queue, renderArray);
     setRenderArray(queue.arr);
   }, [setRenderArray, setQueue]);
 
@@ -53,7 +52,7 @@ export const QueuePage: React.FC = () => {
 
   const enqueue = (value: string) => {
     queue.enqueue(value);
-    (head === null) && setHead(queue.head);
+    head === null && setHead(queue.head);
     setTail(queue.tail);
     renderQueue();
     setInputValue("");
@@ -67,20 +66,22 @@ export const QueuePage: React.FC = () => {
   };
 
   const dequeue = () => {
-    if (queue.head === null) {return}
+    if (queue.head === null) {
+      return;
+    }
     let headTemp = queue.head;
     if (queue.dequeue()) return;
-    (tail === null) && setTail(queue.tail);
+    tail === null && setTail(queue.tail);
     renderArray[headTemp] = {
       ...renderArray[headTemp],
       state: ElementStates.Changing,
     };
     setRenderArray([...renderArray]);
     setTimeout(() => {
-    setHead(queue.head);
-    setTail(queue.tail);
-    renderQueue();
-    ;}, DELAY_IN_MS / 1.59)
+      setHead(queue.head);
+      setTail(queue.tail);
+      renderQueue();
+    }, DELAY_IN_MS / 1.59);
   };
   const clearQueue = () => {
     queue.clear();

@@ -4,7 +4,7 @@ import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { DELAY_IN_MS } from "../../constants/delays";
-import { ElementStates, ElementArray } from "../../types"
+import { ElementStates, ElementArray } from "../../types";
 import style from "./string.module.css";
 const { page, input, letters, letter } = style;
 
@@ -106,7 +106,6 @@ export const StringComponent: React.FC = () => {
             <Circle extraClass={letter} state={i.state} letter={i.letter} />
           </li>
         ))}
-        
       </ul>
     </SolutionLayout>
   );

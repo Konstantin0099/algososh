@@ -11,11 +11,9 @@ import {
   ElementNumberArray,
   Direction,
   SortingMethod,
-  ButtonState
+  ButtonState,
 } from "../../types";
 import style from "./sorting-page.module.css";
-import { random } from "nanoid";
-
 
 const { page, buttonsBox, box, radio, button, visualizedArray, elementArr } =
   style;

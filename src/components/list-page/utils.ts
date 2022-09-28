@@ -1,5 +1,5 @@
 import {LinkedListNode} from "./list"
-import { ElementStates, ButtonState } from "../../types";
+import { ElementStates} from "../../types";
 
 export const returnArray = (head: LinkedListNode<string>) => {
     

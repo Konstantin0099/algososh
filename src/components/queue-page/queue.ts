@@ -30,7 +30,9 @@ export class Queue<T> implements IQueue<T> {
     }
   }
   enqueue = (element: T): void => {
-    if (this.head === MAX_QUEUE) {return}
+    if (this.head === MAX_QUEUE) {
+      return;
+    }
     if (this.head === null) {
       this.head = 0;
       this.tail = 0;
@@ -41,7 +43,6 @@ export class Queue<T> implements IQueue<T> {
     } else {
       if (this.tail !== null) {
         if (this.tail + 1 <= this.size) {
-    
           this.tail++;
           this.arr[this.tail] = {
             value: element,
@@ -62,24 +63,22 @@ export class Queue<T> implements IQueue<T> {
 
   dequeue = (): boolean => {
     if (this.head === null) return true;
-    console.log("dequeue2", (this.tail !== null) , (this.head));
     if (this.tail !== null) {
-      
       if (this.head + 1 <= this.tail) {
         this.arr[this.head] = {
-          state: this.arr[this.head].state
+          state: this.arr[this.head].state,
         };
         this.head++;
       } else {
-        console.log("dequeue4");
         this.arr[this.head] = {
-          state: this.arr[this.head].state
+          state: this.arr[this.head].state,
         };
         this.tail = null;
       }
     } else {
       return true;
-    } return false;
+    }
+    return false;
   };
 
   clear = (): void => {

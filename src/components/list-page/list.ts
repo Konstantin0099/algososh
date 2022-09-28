@@ -1,5 +1,4 @@
 import { ElementStates } from "../../types";
-import { INIT_LENGTH_LIST } from "../../constants/element-captions";
 export class LinkedListNode<T> {
   value?: T;
   state: ElementStates;
@@ -17,7 +16,6 @@ export interface IList<T> {
   delFromTail: () => void;
   addByIndex: (element: T, index: number, state?: ElementStates) => void;
   delByIndex: (index: number) => void;
-  //   dequeue: (element: T, position: number) => void;
 }
 
 export class LinkedList<T> implements IList<T> {
@@ -30,7 +28,6 @@ export class LinkedList<T> implements IList<T> {
     if (arr) {
       for (let i = 0; i <= arr.length - 1; i++) {
         this.addToTail(arr[i], ElementStates.Default);
-        //   console.log("i", i , arr, this.head);
       }
     }
   }
@@ -84,12 +81,7 @@ export class LinkedList<T> implements IList<T> {
     }
     while (nodeTemp && nodeTemp !== null && nodeTemp.next !== this.tail) {
       nodeTemp = nodeTemp.next;
-      console.log(
-        "while",
-        nodeTemp && nodeTemp !== null && nodeTemp.next !== this.tail
-      );
     }
-    console.log("nodeTemp", nodeTemp);
     if (nodeTemp) {
       this.tail = nodeTemp;
       this.tail.next = null;
@@ -108,36 +100,31 @@ export class LinkedList<T> implements IList<T> {
     } else {
       let i = 0;
       this.head && (nodeTemp.next = this.head);
-      while (
-        i < index-1
-      ) {
+      while (i < index - 1) {
         nodeTemp.next?.next && (nodeTemp.next = nodeTemp.next.next);
         i++;
       }
       let tempNodeSecond = nodeTemp.next?.next;
       let tempNodeFirst = nodeTemp.next;
-        nodeTemp.next && (nodeTemp.next = tempNodeSecond);
-        tempNodeFirst && (tempNodeFirst.next = nodeTemp);
+      nodeTemp.next && (nodeTemp.next = tempNodeSecond);
+      tempNodeFirst && (tempNodeFirst.next = nodeTemp);
       setTimeout(() => {}, 500);
     }
   };
   delByIndex = (index: any): void => {
     let tempNode = this.head;
     if (this.head === null && index > 0) {
-        return;
+      return;
+    }
+    if (this.head === null) {
+      return;
+    } else {
+      let i = 0;
+      while (i < index - 1) {
+        tempNode = tempNode?.next;
+        i++;
       }
-      if (this.head === null) { return
-      } else {
-        let i = 0;
-        while (
-          i < index-1
-        ) {
-            tempNode = tempNode?.next
-          i++;
-          console.log("delByIndex", i,tempNode );
-        }
-        tempNode && (tempNode.next = tempNode?.next?.next)
-        // setTimeout(() => {}, 500);
-      }
+      tempNode && (tempNode.next = tempNode?.next?.next);
+    }
   };
 }

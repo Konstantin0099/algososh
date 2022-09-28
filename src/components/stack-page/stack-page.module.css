@@ -7,7 +7,6 @@
 .input {
   display: flex;
   width: 320px;
-  /* margin-right: 15px; */
 }
 
 .buttonsBox {
@@ -27,7 +26,6 @@
 .button {
   padding: 0;
   margin-left: 10px;
-  /* margin-right: 10px; */
 }
 .nodeBox{
   display: flex;

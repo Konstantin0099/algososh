@@ -15,6 +15,7 @@ export const StringComponent: React.FC = () => {
   const [arrLetters, setArrLetters] = useState<ElementArray[]>([]);
 
   const rearrange = (j: number, i: number, arr: ElementArray[]) => {
+    console.log(j, i, arr);
     const arrTemp = [...arr];
     const temp = arrTemp[j].letter;
     arrTemp[j].letter = arrTemp[i].letter;
@@ -23,21 +24,22 @@ export const StringComponent: React.FC = () => {
   };
 
   const rew = (j: number, i: number, arr: ElementArray[]) => {
-    const n = arr.length / 2;
+    const n = Math.floor(arr.length / 2);
     if (j <= i) {
       arr[j].state = ElementStates.Changing;
       arr[i].state = ElementStates.Changing;
     }
-    if (j <= n)
+    if ((j <= n) && (j <= i))
       setTimeout(() => {
         arr = rearrange(j, i, arr);
+        arr[j].state = ElementStates.Modified;
+        arr[i].state = ElementStates.Modified;
         j++;
         i--;
         rew(j, i, arr);
       }, DELAY_IN_MS);
     else {
       if (j - 1 >= 0) {
-        arr[j - 1].state = ElementStates.Modified;
       }
       setArrLetters(arr);
       setIsLoader(false);
@@ -66,7 +68,7 @@ export const StringComponent: React.FC = () => {
       setArrLetters(arrStart);
       setTimeout(() => {
         rew(0, arrStart.length - 1, arrStart);
-      }, 2000);
+      }, DELAY_IN_MS);
     },
     [setIsLoader, setArrLetters, setInputString]
   );

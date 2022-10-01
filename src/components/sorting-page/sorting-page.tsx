@@ -117,7 +117,7 @@ export const SortingPage: React.FC = () => {
     arr[i].state = ElementStates.Changing;
     i > 0 && (arr[i - 1].state = ElementStates.Default);
     setArrNumbers([...arr]);
-    if (j <= arr.length - 1 && direction === arr[i].number < arr[j].number) {
+    if (j <= arr.length - 1 && direction === arr[i].number > arr[j].number) {
       const temp = arr[i].number;
       arr[i].number = arr[j].number;
       arr[j].number = temp;

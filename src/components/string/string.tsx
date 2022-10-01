@@ -15,7 +15,6 @@ export const StringComponent: React.FC = () => {
   const [arrLetters, setArrLetters] = useState<ElementArray[]>([]);
 
   const rearrange = (j: number, i: number, arr: ElementArray[]) => {
-    console.log(j, i, arr);
     const arrTemp = [...arr];
     const temp = arrTemp[j].letter;
     arrTemp[j].letter = arrTemp[i].letter;

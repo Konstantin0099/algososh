@@ -3,7 +3,7 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
-import { DELAY_IN_MS } from "../../constants/delays";
+import { DELAY_IN_MS, SHORT_DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates, SearchIndex } from "../../types";
 import style from "./list-page.module.css";
 import { LinkedListNode, LinkedList } from "./list";
@@ -67,6 +67,10 @@ export const ListPage: React.FC = () => {
       });
   };
   const inputChangeIndex = (e: ChangeEvent<HTMLInputElement>) => {
+    if (renderArray.length -1  < Number(e.target.value)) {
+      setInputIndex("НЕТ ТАКОГО ИНДЕКСА!!!")
+      setTimeout(()=>{setInputIndex("")} , SHORT_DELAY_IN_MS);
+      return} 
     setInputIndex(e.target.value);
     !e.target.value &&
       setBattonState({

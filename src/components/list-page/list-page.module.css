@@ -1,0 +1,43 @@
+.page {
+    display: flex;
+    justify-content: center;
+    min-width: 300px;
+  }
+  
+  .input {
+    display: flex;
+    width: 320px;
+  }
+  
+  .buttonsBox {
+    display: flex;
+    min-width: 300px;
+    flex-direction: row;
+    justify-content: center;
+    margin: 10px;
+    list-style: none;
+  }
+  .node {
+    margin: 7px;
+  }
+  .clear {
+    margin-left: 37px;
+  }
+  .button {
+    padding: 20px;
+    margin-left: 10px;
+    min-width: 150px;
+  }
+  .buttonInd {
+    padding: 20px;
+    margin-left: 10px;
+    min-width: 320px;
+  }
+  .nodeBox{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 100px 0 0;
+    margin: 10px;
+    list-style: none;
+  }

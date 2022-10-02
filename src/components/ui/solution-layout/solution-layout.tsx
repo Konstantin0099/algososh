@@ -7,7 +7,6 @@ interface SolutionLayoutProps {
   title: string;
   extraClass?: string;
 }
-
 export const SolutionLayout: React.FC<SolutionLayoutProps> = ({
   extraClass = "",
   title,

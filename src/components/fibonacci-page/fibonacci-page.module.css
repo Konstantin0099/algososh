@@ -1,0 +1,24 @@
+.page {
+  display: flex;
+  justify-content: center;
+}
+
+.input {
+  display: flex;
+  width: 380px;
+  margin-right: 15px;
+}
+.numbers {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, minmax(min-content, 80px));
+  gap: 50px 10px;
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 50px 0 0 ;
+  list-style: none;
+}
+
+.numberClass {
+  margin: 2px;
+}

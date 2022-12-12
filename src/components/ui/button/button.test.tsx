@@ -30,15 +30,12 @@ it("!!!!!!disabled Button", () => {
   expect(buttonSnapshot).toMatchSnapshot();
 });
 it("!!!!!!disabled Button", () => {
-  // render(<Button text="textInButton"/>);
-  // const buttonWithText = screen.getByText("textInButton");
   const buttonSnapshot = renderer
   .create(<Button isLoader={true} />)
   .toJSON();
   expect(buttonSnapshot).toMatchSnapshot();
-  // expect(buttonWithText).toBeInTheDocument();
 });
-it('Нажатие на кнопку вызывает корректный alert', () => {
+it('Нажатие на кнопку вызывает onClick, которая вызывает alert', () => {
   window.alert = jest.fn();
   render(<Button text="textInButton" onClick={onClick}/>);
   const buttonWithText = screen.getByText("textInButton");

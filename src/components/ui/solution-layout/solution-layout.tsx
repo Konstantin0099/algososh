@@ -33,7 +33,8 @@ export const SolutionLayout: React.FC<PropsWithChildren<SolutionLayoutProps>> = 
        {children}
       </div>
       <p
-        className={`text text_type_column text_color_input mt-14 ${styles.copyright}`}
+        className={`text text_color_input mt-14 ${styles.copyright}`}
+        // className={`text text_type_column text_color_input mt-14 ${styles.copyright}`}
       >
         © Сделано в Практикуме.
       </p>

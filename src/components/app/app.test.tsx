@@ -1,15 +1,12 @@
-
-import React from "react";
 import App from "./app";
 import { render, screen } from "@testing-library/react";
 import renderer from "react-test-renderer";
-import { Link } from "react-router-dom";
 import styles from "./main-page.module.css";
 
 
-describe('todos reducer', () => {
+describe('<<<<<App>>>>>', () => {
   
-  it("!!!!!!!!!!!!!!!renders Link", () => {
+  it("!!!!!!renders App", () => {
   render(<App />);
   const linkElement1 = screen.getByText("им. Фибоначчи");
   const tree = renderer

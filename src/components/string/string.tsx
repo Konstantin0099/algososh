@@ -29,20 +29,23 @@ export const StringComponent: React.FC = () => {
       arr[i].state = ElementStates.Changing;
     }
     if ((j <= n) && (j <= i))
-      setTimeout(() => {
+    {
+      // setTimeout(() => {
         arr = rearrange(j, i, arr);
         arr[j].state = ElementStates.Modified;
         arr[i].state = ElementStates.Modified;
         j++;
         i--;
         rew(j, i, arr);
-      }, DELAY_IN_MS);
+      // });
+      // }, DELAY_IN_MS);
+  }
     else {
       if (j - 1 >= 0) {
       }
       setArrLetters(arr);
       setIsLoader(false);
-      setInputString("");
+      // setInputString({preloaderText: "", text: inputString.text});
       return;
     }
     if (j - 1 >= 0) {
@@ -56,7 +59,7 @@ export const StringComponent: React.FC = () => {
   const wrapString = useMemo(
     () => (string: string) => {
       setIsLoader(true);
-      setInputString("ожидайте завершения разворота");
+      // setInputString("ожидайте завершения разворота");
       const arrStart: ElementArray[] = [];
       const arrString: string[] = string.split("");
       for (let i = 0; i <= arrString.length - 1; i++) {
@@ -65,14 +68,15 @@ export const StringComponent: React.FC = () => {
       arrStart[0].state = ElementStates.Changing;
       arrStart[arrStart.length - 1].state = ElementStates.Changing;
       setArrLetters(arrStart);
-      setTimeout(() => {
+      // setTimeout(() => {
         rew(0, arrStart.length - 1, arrStart);
-      }, DELAY_IN_MS);
+      // });
     },
     [setIsLoader, setArrLetters, setInputString]
   );
   const inputChange = useMemo(
     () => (e: any) => {
+      // console.log("inputChange", e)
       setInputString(e.target.value);
       if (e.target.value) {
         setIsDisabled(false);
@@ -82,6 +86,7 @@ export const StringComponent: React.FC = () => {
     },
     [setInputString]
   );
+
   return (
     <SolutionLayout title="Строка">
       <div className={page}>
@@ -89,7 +94,7 @@ export const StringComponent: React.FC = () => {
           extraClass={input}
           type={"text"}
           maxLength={11}
-          value={inputString}
+          value={isLoader ? "ожидайте завершения разворота" : inputString}
           isLimitText
           onChange={inputChange}
         />

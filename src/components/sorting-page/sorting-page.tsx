@@ -66,10 +66,10 @@ export const SortingPage: React.FC = () => {
     }
 
     if (j <= arr.length - 1) {
-      setTimeout(() => {
+      // setTimeout(() => {
         j++;
         selection(arr, direction, j, min);
-      }, DELAY_IN_MS);
+      // }, DELAY_IN_MS);
     } else {
       let idx = min.indexStart;
       if (direction === arr[idx].number > min.number) {
@@ -121,30 +121,30 @@ export const SortingPage: React.FC = () => {
       const temp = arr[i].number;
       arr[i].number = arr[j].number;
       arr[j].number = temp;
-      setTimeout(() => {
+      // setTimeout(() => {
         setArrNumbers([...arr]);
-      }, SHORT_DELAY_IN_MS);
+      // }, SHORT_DELAY_IN_MS);
     }
     if (j < min.indexFinish) {
-      setTimeout(() => {
+      // setTimeout(() => {
         j++;
         bubble(arr, direction, j, min);
-      }, DELAY_IN_MS);
+      // }, DELAY_IN_MS);
     } else {
       if (j > 1) {
-        setTimeout(() => {
+        // setTimeout(() => {
           arr[j].state = ElementStates.Modified;
           arr[i].state = ElementStates.Default;
           min.indexFinish--;
           bubble(arr, direction, 1, min);
-        }, DELAY_IN_MS);
+        // }, DELAY_IN_MS);
       } else {
-        setTimeout(() => {
+        // setTimeout(() => {
           arr[j].state = ElementStates.Modified;
           arr[i].state = ElementStates.Modified;
           toggleButton(false);
           setArrNumbers([...arr]);
-        }, DELAY_IN_MS);
+        // }, DELAY_IN_MS);
       }
     }
   };

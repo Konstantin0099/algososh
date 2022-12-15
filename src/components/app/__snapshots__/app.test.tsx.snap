@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`todos reducer !!!!!!!!!!!!!!!renders Link 1`] = `
+exports[`<<<<<App>>>>> !!!!!!renders App 1`] = `
 <div
   className="card string"
 />

@@ -29,7 +29,7 @@ it("!!!!!!disabled Button", () => {
   .toJSON();
   expect(buttonSnapshot).toMatchSnapshot();
 });
-it("!!!!!!disabled Button", () => {
+it("!!!!!!isLoader Button", () => {
   const buttonSnapshot = renderer
   .create(<Button isLoader={true} />)
   .toJSON();

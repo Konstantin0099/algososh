@@ -31,7 +31,6 @@ export const Button: React.FC<ButtonProps> = ({
   } ${linkedList && styles[linkedList]} ${
     isLoader && styles.loader
   } ${extraClass}`;
-
   return (
     <button
       className={className}

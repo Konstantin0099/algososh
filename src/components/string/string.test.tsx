@@ -1,80 +1,83 @@
 import App from "../app/app";
-// import {StringComponent} from "./string";
 import {
   render,
-  screen,
   fireEvent,
   waitFor,
-  findByText,
+  RenderResult,
 } from "@testing-library/react";
-import renderer from "react-test-renderer";
-import { Link } from "react-router-dom";
-import styles from "./main-page.module.css";
+
+jest.setTimeout(25000);
+const checTurn = (circList: HTMLCollectionOf<Element>, arrString: string[]) => {
+  for (let i = 0; i <= circList.length - 1; i++) {
+    expect(circList[i].innerHTML).toBe(arrString[i]);
+  }
+};
+const asyncWaitFor = async (cont: RenderResult, elementButton: HTMLElement) =>
+  waitFor(() => expect(cont.getByText("Развернуть")).toBeInTheDocument(), {
+    container: elementButton,
+    timeout: 6000,
+    interval: 500,
+  });
+const initializingNewData = (
+  cont: RenderResult,
+  elementInput: HTMLElement,
+  string: string
+) => {
+  fireEvent.change(elementInput, { target: { value: string } });
+  const elementButton = cont.getByText("Развернуть");
+  fireEvent.click(elementButton);
+  const queryButton: HTMLElement | null = cont.queryByText("Развернуть");
+  const btn = { queryButton: queryButton, elementButton: elementButton };
+  return btn;
+};
 
 describe("<<<<<StringComponent>>>>>>", () => {
-  render(<App />);
-  const linkElementString = screen.getAllByRole("link");
-  fireEvent.click(linkElementString[0]);
-  const elementInput = screen.getByPlaceholderText("Введите текст");
-  const elementButton = screen.getByText("Развернуть");
-  it("++TEST++ line reversal 4 item", () => {
-    fireEvent.change(elementInput, { target: { value: "XZQW" } });
-    fireEvent.click(elementButton);
-    const circList = document.getElementsByClassName("text_type_circle");
-    const arrString = ["W", "Q", "Z", "X"];
-    for (let i = 0; i <= circList.length - 1; i++) {
-      expect(circList[i].innerHTML).toBe(arrString[i]);
-    }
-  });
-  it("++TEST++ line reversal 2 item", () => {
-    fireEvent.change(elementInput, { target: { value: "XZ" } });
-    fireEvent.click(elementButton);
-    const circList = document.getElementsByClassName("text_type_circle");
-    const arrString = ["Z", "X"];
-    for (let i = 0; i <= circList.length - 1; i++) {
-      expect(circList[i].innerHTML).toBe(arrString[i]);
-    }
-  });
-  it("++TEST++ line reversal 3 item", async () => {
-    fireEvent.change(elementInput, { target: { value: "XZE" } });
-    fireEvent.click(elementButton);
-    const circList = document.getElementsByClassName("text_type_circle");
-    const arrString = ["E", "Z", "X"];
-    for (let i = 0; i <= circList.length - 1; i++) {
-      expect(circList[i].innerHTML).toBe(arrString[i]);
-    }
-  });
-  it("++TEST++ line reversal 1 item", async () => {
-    fireEvent.change(elementInput, { target: { value: "X" } });
-    fireEvent.click(elementButton);
-    const circList = document.getElementsByClassName("text_type_circle");
-    const arrString = ["X"];
-    for (let i = 0; i <= circList.length - 1; i++) {
-      expect(circList[i].innerHTML).toBe(arrString[i]);
-    }
-  });
-  it("++TEST++ line reversal 0 item", async () => {
-    fireEvent.change(elementInput, { target: { value: "" } });
-    fireEvent.click(elementButton);
-    const circList = document.getElementsByClassName("text_type_circle");
-    expect(circList[0]).toBeUndefined;
+  const setUp = () => {
+    const cont = render(<App />);
+    const linkElementString = cont.getAllByRole("link");
+    fireEvent.click(linkElementString[0]);
+    expect(cont.queryByPlaceholderText("Развернуть")).toBe(null);
+    const elementInput = cont.getByPlaceholderText("Введите текст");
+    const elementButton = cont.getByText("Развернуть");
+    return {
+      cont,
+      elementInput,
+      elementButton,
+    };
+  };
+
+  it("++TEST++ line reversal 4 item", async () => {
+    let { cont, elementInput } = setUp();
+    let btn = initializingNewData(cont, elementInput, "XZQW");
+
+    expect(btn.queryButton).toBe(null);
+    await asyncWaitFor(cont, btn.elementButton);
+    let circList = document.getElementsByClassName("text_type_circle");
+    let arrString = ["W", "Q", "Z", "X"];
+    checTurn(circList, arrString);
+
+    btn = initializingNewData(cont, elementInput, "RTY");
+    expect(btn.queryButton).toBe(null);
+    await asyncWaitFor(cont, btn.elementButton);
+    checTurn(document.getElementsByClassName("text_type_circle"), [
+      "Y",
+      "T",
+      "R",
+    ]);
+
+    btn = initializingNewData(cont, elementInput, "RT");
+    expect(btn.queryButton).toBe(null);
+    await asyncWaitFor(cont, btn.elementButton);
+    checTurn(document.getElementsByClassName("text_type_circle"), ["T", "R"]);
+
+    btn = initializingNewData(cont, elementInput, "T");
+    expect(btn.queryButton).toBe(null);
+    await asyncWaitFor(cont, btn.elementButton);
+    checTurn(document.getElementsByClassName("text_type_circle"), ["T"]);
+
+    btn = initializingNewData(cont, elementInput, "");
+    expect(btn.queryButton).not.toBe(null);
+    fireEvent.click(btn.elementButton);
+    expect(btn.elementButton).toBeInTheDocument();
   });
 });
-// render(<App />);
-// const linkElementString = screen.getAllByRole('link');
-// fireEvent.click(linkElementString[0]);
-// const elementInput = screen.getByPlaceholderText('Введите текст');
-// const elementButton = screen.getByText('Развернуть');
-// console.log(circList[0]);
-// const arrString = [];
-// for (let i = 0; i <= circList.length-1; i++ )  {
-//     expect(circList[i].innerHTML).toBe(arrString[i])
-// }
-// expect(linkElementString[0]).toBeInTheDocument();
-// expect(elementInput).toBeInTheDocument();
-// let circleElements = screen.getAllByRole('listitem');
-// expect(circleElements.length).toBe(4);
-// jest.useFakeTimers();
-// jest.spyOn(global, 'setTimeout');
-// // jest.setTimeout(5000);
-// jest.useRealTimers

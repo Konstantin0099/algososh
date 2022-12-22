@@ -27,8 +27,7 @@ export const StringComponent: React.FC = () => {
       arr[j].state = ElementStates.Changing;
       arr[i].state = ElementStates.Changing;
     }
-    if ((j <= n) && (j <= i))
-    {
+    if (j <= n && j <= i) {
       setTimeout(() => {
         arr = rearrange(j, i, arr);
         arr[j].state = ElementStates.Modified;
@@ -37,13 +36,11 @@ export const StringComponent: React.FC = () => {
         i--;
         rew(j, i, arr);
       }, DELAY_IN_MS);
-  }
-    else {
+    } else {
       if (j - 1 >= 0) {
       }
       setArrLetters(arr);
       setIsLoader(false);
-      // setInputString({preloaderText: "", text: inputString.text});
       return;
     }
     if (j - 1 >= 0) {
@@ -62,16 +59,19 @@ export const StringComponent: React.FC = () => {
       for (let i = 0; i <= arrString.length - 1; i++) {
         arrStart[i] = { letter: arrString[i], state: ElementStates.Default };
       }
-      arrStart[0].state = ElementStates.Changing;
-      arrStart[arrStart.length - 1].state = ElementStates.Changing;
       setArrLetters(arrStart);
       setTimeout(() => {
-        rew(0, arrStart.length - 1, arrStart);
+        arrStart[0].state = ElementStates.Changing;
+        arrStart[arrStart.length - 1].state = ElementStates.Changing;
+        setArrLetters([...arrStart]);
       }, DELAY_IN_MS);
+      setTimeout(() => {
+        rew(0, arrStart.length - 1, arrStart);
+      }, DELAY_IN_MS * 2);
     },
     [setIsLoader, setArrLetters]
   );
-  
+
   const inputChange = useMemo(
     () => (e: any) => {
       setInputString(e.target.value);
@@ -92,9 +92,7 @@ export const StringComponent: React.FC = () => {
         <Button
           text="Развернуть"
           isLoader={isLoader}
-            disabled={inputString ? false : true }
-            // isDisabled}
-
+          disabled={inputString ? false : true}
           linkedList={"small"}
           onClick={() => wrapString(inputString)}
         />

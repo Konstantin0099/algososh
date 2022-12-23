@@ -23,8 +23,8 @@ describe("service is available", function () {
         .click();
       cy.get("button").contains("Удалить").parent().should("be.enabled");
       cy.get("button").contains("Очистить").parent().should("be.enabled");
-      cy.get("li p[class*=text_type_circle]").as("circ1");
-      cy.get("@circ1")
+      cy.get("li p[class*=text_type_circle]").as("circleElements");
+      cy.get("@circleElements")
         .eq(i)
         .parent()
         .should("have.css", "border-color", "rgb(210, 82, 225)");
@@ -36,7 +36,7 @@ describe("service is available", function () {
         .end("have.value", i);
       cy.get("input").should("have.text", "");
       cy.get("button").contains("Добавить").parent().should("be.disabled");
-      cy.get("@circ1")
+      cy.get("@circleElements")
         .eq(i)
         .parent()
         .should("have.css", "border-color", "rgb(0, 50, 255)");
@@ -44,20 +44,20 @@ describe("service is available", function () {
 
     cy.get("button").contains("Удалить").click();
 
-    cy.get("@circ1")
+    cy.get("@circleElements")
       .last()
       .parent()
       .should("have.css", "border-color", "rgb(210, 82, 225)");
 
     cy.get("button").contains("Удалить").click();
-    cy.get("@circ1")
+    cy.get("@circleElements")
       .last()
       .parent()
       .should("have.css", "border-color", "rgb(210, 82, 225)");
-    cy.get("@circ1").should("have.length", i - 2);
+    cy.get("@circleElements").should("have.length", i - 2);
 
     cy.get("button").contains("Очистить").click();
-    cy.get("@circ1").should("have.length", 0);
+    cy.get("@circleElements").should("have.length", 0);
     cy.get("button").contains("Добавить").parent().should("be.disabled");
     cy.get("button").contains("Удалить").parent().should("be.disabled");
     cy.get("button").contains("Очистить").parent().should("be.disabled");

@@ -36,8 +36,8 @@ describe("service is available", function () {
     cy.get("button").should("be.disabled");
     cy.get("input").type("Hello,World");
     cy.contains("Развернуть").click();
-    cy.get("li p[class*=text_type_circle]").as("circ1");
-    cy.get("@circ1")
+    cy.get("li p[class*=text_type_circle]").as("circleElements");
+    cy.get("@circleElements")
       .eq(0)
       .parent()
       .should("have.css", "border-color", "rgb(0, 50, 255)")
@@ -45,13 +45,13 @@ describe("service is available", function () {
     cy.tick(DELAY_IN_MS);
     const stringStart = "Hello,World";
     for (let i = 0; i <= stringStart.length / 2; i++) {
-      cy.get("@circ1")
+      cy.get("@circleElements")
         .eq(i)
         .parent()
         .should("have.css", "border-color", "rgb(210, 82, 225)")
         .and("have.text", stringStart[i]);
       cy.tick(i === 0 ? 2000 : 1000);
-      cy.get("@circ1")
+      cy.get("@circleElements")
         .eq(i)
         .parent()
         .should("have.css", "border-color", "rgb(127, 224, 81)")
@@ -71,15 +71,15 @@ describe("service is available", function () {
     let fibonacci = 1;
     let chin = 0;
     for (let i = 0; i <= 19; i++) {
-      cy.get("li p[class*=text_type_circle]").as("circ1");
-      cy.get("@circ1")
+      cy.get("li p[class*=text_type_circle]").as("circleElements");
+      cy.get("@circleElements")
         .eq(i)
         .parent()
         .should("have.css", "border-color", "rgb(0, 50, 255)");
       if (i > 1) {
         fibonacci = fibonacci + chin;
         chin = fibonacci - chin;
-        cy.get("@circ1").eq(i).should("have.text", fibonacci);
+        cy.get("@circleElements").eq(i).should("have.text", fibonacci);
       } else {
         chin = fibonacci;
       }

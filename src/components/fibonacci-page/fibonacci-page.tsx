@@ -85,7 +85,7 @@ export const FibonacciPage: React.FC = () => {
           onChange={rememberNumber}
         />
         <Button
-          text="Расcчитать"
+          text="Рассчитать"
           isLoader={isLoader}
           disabled={isDisabled}
           linkedList={"small"}

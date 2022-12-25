@@ -68,7 +68,7 @@ export const ListPage: React.FC = () => {
   };
   const inputChangeIndex = (e: ChangeEvent<HTMLInputElement>) => {
     if (renderArray.length - 1 < Number(e.target.value) || !Number.isInteger(Number(e.target.value))) {
-      setInputIndex("НЕТ ТАКОГО ИНДЕКСА!!!");
+      setInputIndex("нет ТАКОГО ИНДЕКСА!!!");
       setTimeout(() => {
         setInputIndex("");
       }, DELAY_IN_MS);

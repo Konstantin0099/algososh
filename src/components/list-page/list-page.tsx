@@ -67,10 +67,13 @@ export const ListPage: React.FC = () => {
       });
   };
   const inputChangeIndex = (e: ChangeEvent<HTMLInputElement>) => {
-    if (renderArray.length -1  < Number(e.target.value)) {
-      setInputIndex("НЕТ ТАКОГО ИНДЕКСА!!!")
-      setTimeout(()=>{setInputIndex("")} , SHORT_DELAY_IN_MS);
-      return} 
+    if (renderArray.length - 1 < Number(e.target.value) || !Number.isInteger(Number(e.target.value))) {
+      setInputIndex("НЕТ ТАКОГО ИНДЕКСА!!!");
+      setTimeout(() => {
+        setInputIndex("");
+      }, DELAY_IN_MS);
+      return;
+    }
     setInputIndex(e.target.value);
     !e.target.value &&
       setBattonState({
@@ -289,6 +292,7 @@ export const ListPage: React.FC = () => {
       </div>
       <div className={buttonsBox}>
         <Input
+          placeholder={"Введите индекс"}
           extraClass={input}
           type={"text"}
           maxLength={2}

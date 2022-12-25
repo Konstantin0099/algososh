@@ -66,7 +66,6 @@ describe("service is available", function () {
     cy.get("input").should("have.text", "");
     cy.get("button").should("be.disabled");
     cy.get("input").type("19");
-    // cy.get('button').eq(1).click();
     cy.get("button").contains("Рассчитать").click();
     let fibonacci = 1;
     let chin = 0;

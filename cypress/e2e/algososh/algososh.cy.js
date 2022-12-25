@@ -10,7 +10,7 @@ describe("service is available", function () {
     cy.visit("http://localhost:3000");
   });
 
-  it("test2", function () {
+  it("checking the availability of algorithms", function () {
     cy.get("a[href]").as("algoritm");
     cy.get('a[href*="/recursion"]').click();
     cy.get("h3").should("have.text", "Строка");
@@ -84,8 +84,6 @@ describe("service is available", function () {
       }
 
       cy.tick(DELAY_IN_MS);
-
     }
-
   });
 });

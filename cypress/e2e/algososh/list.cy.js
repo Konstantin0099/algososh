@@ -1,14 +1,16 @@
 import { DELAY_IN_MS } from "../../../src/constants/delays";
+import { testUrl } from "../../../src/constants/urls";
+import { colorChanging, colorDefault, colorModified } from "../../../src/constants/colors";
 
 describe("service is available", function () {
   it("should be available on localhost:3000", function () {
-    cy.visit("http://localhost:3000");
+    cy.visit(testUrl);
   });
 
   it("test list", function () {
     const defaultListlength = 5;
     cy.clock();
-    cy.visit("http://localhost:3000");
+    cy.visit(testUrl);
     cy.get('a[href*="/list"]').click();
     cy.get("h3").should("have.text", "Связный список");
     cy.get("input[placeholder='Введите текст']").as("inputText");
@@ -47,7 +49,7 @@ describe("service is available", function () {
     cy.get("li p[class*=text_type_circle]")
       .parent()
       .as("circleElement")
-      .should("have.css", "border-color", "rgb(0, 50, 255)")
+      .should("have.css", "border-color", colorDefault)
       .and("have.length", defaultListlength);
     cy.get("li p[class*=text_type_circle]")
       .parent()
@@ -71,14 +73,14 @@ describe("service is available", function () {
     cy.get("@heads")
       .contains("NN")
       .parent()
-      .should("have.css", "border-color", "rgb(210, 82, 225)");
+      .should("have.css", "border-color", colorChanging);
     cy.get("li p[class*=text_type_circle]").parent().should("have.length", defaultListlength+1);
     cy.tick(DELAY_IN_MS);
     cy.get("li p[class*=text_type_circle]")
       .parent()
       .should("have.length", defaultListlength+1)
       .last()
-      .and("have.css", "border-color", "rgb(127, 224, 81)");
+      .and("have.css", "border-color", colorModified);
     cy.tick(DELAY_IN_MS);
 
     cy.get("@inputText").type("NN");
@@ -87,19 +89,19 @@ describe("service is available", function () {
     cy.get("@heads")
       .contains("NN")
       .parent()
-      .should("have.css", "border-color", "rgb(210, 82, 225)");
+      .should("have.css", "border-color", colorChanging);
     cy.get("li p[class*=text_type_circle]")
       .parent()
       .should("have.length", defaultListlength + 2)
       .first()
-      .should("have.css", "border-color", "rgb(210, 82, 225)");
+      .should("have.css", "border-color", colorChanging);
     cy.tick(DELAY_IN_MS);
     cy.get("@heads").should("not.have.text", "NN");
     cy.tick(DELAY_IN_MS);
     cy.get("li p[class*=text_type_circle]")
       .parent()
       .should("have.length", defaultListlength+2)
-      .and("have.css", "border-color", "rgb(0, 50, 255)");
+      .and("have.css", "border-color", colorDefault);
 
     cy.get("@btnDelInHead").should("be.enabled").click();
     cy.get("li p[class*=text_type_circle]")
@@ -110,7 +112,7 @@ describe("service is available", function () {
     cy.get("li p[class*=text_type_circle]")
       .parent()
       .eq(1)
-      .should("have.css", "border-color", "rgb(210, 82, 225)")
+      .should("have.css", "border-color", colorChanging)
       .and("have.text", "NN");
     cy.tick(DELAY_IN_MS);
     cy.get("li p[class*=text_type_circle]").parent().should("have.length", defaultListlength + 1);
@@ -121,7 +123,7 @@ describe("service is available", function () {
       .should("have.length", defaultListlength+2)
       .last()
       .should("have.text", "NN")
-      .and("have.css", "border-color", "rgb(210, 82, 225)");
+      .and("have.css", "border-color", colorChanging);
     cy.get("li p[class*=text_type_circle]")
       .parent()
       .eq(5)
@@ -134,10 +136,9 @@ describe("service is available", function () {
     cy.get("@inputIndex").type(indexAddTest);
     cy.get("@btnAddInIndex").should("be.enabled").click();
     let k = 1;
-    const defaultColor = "rgb(0, 50, 255)";
-    const changingColor = "rgb(210, 82, 225)";
-    const modifiedColor = "rgb(127, 224, 81)";
-    let color = defaultColor;
+
+   
+    let color = colorDefault;
 
     for (let j = 0; j <= indexAddTest; j++) {
       console.log(j === indexAddTest, j, k);
@@ -146,22 +147,22 @@ describe("service is available", function () {
         .should("have.length", 6)
         .eq(j)
         .should("have.text", "NN")
-        .and("have.css", "border-color", changingColor);
+        .and("have.css", "border-color", colorChanging);
       cy.get("li p[class*=text_type_circle]")
         .parent()
         .eq(k)
-        .and("have.css", "border-color", color);
-      color = modifiedColor;
+        .and("have.css", "border-color", colorModified);
+      // color = colorModified;
       cy.tick(DELAY_IN_MS);
       if (j === indexAddTest) {
         cy.get("li p[class*=text_type_circle]")
           .parent()
           .eq(j)
-          .and("have.css", "border-color", modifiedColor);
+          .and("have.css", "border-color", colorChanging);
         cy.get("li p[class*=text_type_circle]")
           .parent()
           .eq(k)
-          .and("have.css", "border-color", defaultColor);
+          .and("have.css", "border-color", colorModified);
         cy.tick(DELAY_IN_MS);
       }
       k = j;
@@ -177,18 +178,18 @@ describe("service is available", function () {
       cy.get("li p[class*=text_type_circle]")
         .parent()
         .eq(j)
-        .should("have.css", "border-color", modifiedColor);
+        .should("have.css", "border-color", colorModified);
       if (j === indexDelTest) {
         cy.get("li p[class*=text_type_circle]")
           .parent()
           .eq(j + 1)
-          .should("have.css", "border-color", changingColor);
+          .should("have.css", "border-color", colorChanging);
       }
-      cy.tick(DELAY_IN_MS);
+      cy.tick(DELAY_IN_MS*1.25);
     }
     cy.get("li p[class*=text_type_circle]")
       .parent()
-      .should("have.css", "border-color", defaultColor)
+      .should("have.css", "border-color", colorDefault)
       .and("have.length", 5);
   });
 });

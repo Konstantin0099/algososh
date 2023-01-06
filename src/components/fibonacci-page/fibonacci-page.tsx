@@ -38,15 +38,6 @@ export const FibonacciPage: React.FC = () => {
     () => (q: number | string) => {
       setIsLoader(true);
       const arr: number[] = [];
-      if (q < 0 || q > 19 || !Number.isInteger(Number(q))) {
-        setIsDisabled(true);
-        setIsLoader(false);
-        setInputNumber("ВВЕДЕНО НЕПРАВИЛЬНОЕ ЗНАЧЕНИЕ");
-        setTimeout(() => {
-          setInputNumber("");
-          return;
-        }, 3000);
-      } else {
         arr[0] = 1;
         if (q > 0 && q <= 19) {
           setTimeout(() => {
@@ -54,19 +45,21 @@ export const FibonacciPage: React.FC = () => {
           }, DELAY_IN_MS);
         }
         setArrNumbers(arr);
-      }
       return;
     },
     [setIsLoader, setInputNumber, setArrNumbers, lineUp]
   );
   const rememberNumber = useMemo(
     () => (e: any) => {
-      setInputNumber(e.target.value);
-      if (e.target.value) {
+      const valueInput = e.target.value;
+      if (valueInput >= 0 && valueInput <= 19 && Number.isInteger(Number(valueInput))) {
+      setInputNumber(valueInput);
+      if (valueInput) {
         setIsDisabled(false);
       } else {
         setIsDisabled(true);
       }
+    }
     },
     [setInputNumber, setIsDisabled]
   );

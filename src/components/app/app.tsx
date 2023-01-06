@@ -7,20 +7,20 @@ import { QueuePage } from "../queue-page/queue-page";
 import { StringComponent } from "../string/string";
 import { SortingPage } from "../sorting-page/sorting-page";
 import { StackPage } from "../stack-page/stack-page";
-import "./app.css";
+import style from "./app.module.css";
 
 function App() {
   return (
-    <div className="app">
+    <div className={style.app}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<MainPage />} />
-          <Route path="/recursion" element={<StringComponent />}/>
-          <Route path="/fibonacci" element={<FibonacciPage />}/>
-          <Route path="/sorting" element={<SortingPage />}/>
-          <Route path="/stack" element={<StackPage />}/>
-          <Route path="/queue" element={<QueuePage />}/>
-          <Route path="/list" element={<ListPage />}/>
+          <Route path="/recursion" element={<StringComponent />} />
+          <Route path="/fibonacci" element={<FibonacciPage />} />
+          <Route path="/sorting" element={<SortingPage />} />
+          <Route path="/stack" element={<StackPage />} />
+          <Route path="/queue" element={<QueuePage />} />
+          <Route path="/list" element={<ListPage />} />
         </Routes>
       </BrowserRouter>
     </div>

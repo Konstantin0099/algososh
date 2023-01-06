@@ -1,4 +1,6 @@
 import { DELAY_IN_MS } from "../../../src/constants/delays";
+import { testUrl } from "../../../src/constants/urls";
+import { colorChanging, colorDefault, colorModified } from "../../../src/constants/colors";
 
 describe("service is available", function () {
   const goBackToMain = () =>
@@ -7,7 +9,7 @@ describe("service is available", function () {
       $lis.eq(0).click();
     });
   it("should be available on localhost:3000", function () {
-    cy.visit("http://localhost:3000");
+    cy.visit(testUrl);
   });
 
   it("checking the availability of algorithms", function () {
@@ -40,7 +42,7 @@ describe("service is available", function () {
     cy.get("@circleElements")
       .eq(0)
       .parent()
-      .should("have.css", "border-color", "rgb(0, 50, 255)")
+      .should("have.css", "border-color", colorDefault)
       .and("have.text", "H");
     cy.tick(DELAY_IN_MS);
     const stringStart = "Hello,World";
@@ -48,13 +50,13 @@ describe("service is available", function () {
       cy.get("@circleElements")
         .eq(i)
         .parent()
-        .should("have.css", "border-color", "rgb(210, 82, 225)")
+        .should("have.css", "border-color", colorChanging)
         .and("have.text", stringStart[i]);
       cy.tick(i === 0 ? 2000 : 1000);
       cy.get("@circleElements")
         .eq(i)
         .parent()
-        .should("have.css", "border-color", "rgb(127, 224, 81)")
+        .should("have.css", "border-color", colorModified)
         .and("have.text", stringStart[stringStart.length - i - 1]);
     }
   });
@@ -74,7 +76,7 @@ describe("service is available", function () {
       cy.get("@circleElements")
         .eq(i)
         .parent()
-        .should("have.css", "border-color", "rgb(0, 50, 255)");
+        .should("have.css", "border-color", colorDefault);
       if (i > 1) {
         fibonacci = fibonacci + chin;
         chin = fibonacci - chin;

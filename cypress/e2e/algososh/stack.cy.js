@@ -1,6 +1,9 @@
+import { testUrl } from "../../../src/constants/urls";
+import { colorChanging, colorDefault} from "../../../src/constants/colors";
+
 describe("service is available", function () {
   it("should be available on localhost:3000", function () {
-    cy.visit("http://localhost:3000");
+    cy.visit(testUrl);
   });
 
   it("test stack", function () {
@@ -25,7 +28,7 @@ describe("service is available", function () {
       cy.get("@circleElements")
         .eq(i)
         .parent()
-        .should("have.css", "border-color", "rgb(210, 82, 225)");
+        .should("have.css", "border-color", colorChanging);
       cy.get("li div.text_type_input.mb-4")
         .contains("top")
         .should("have.length", 1);
@@ -37,7 +40,7 @@ describe("service is available", function () {
       cy.get("@circleElements")
         .eq(i)
         .parent()
-        .should("have.css", "border-color", "rgb(0, 50, 255)");
+        .should("have.css", "border-color", colorDefault);
     }
 
     cy.get("button").contains("Удалить").click();
@@ -45,13 +48,13 @@ describe("service is available", function () {
     cy.get("@circleElements")
       .last()
       .parent()
-      .should("have.css", "border-color", "rgb(210, 82, 225)");
+      .should("have.css", "border-color", colorChanging);
 
     cy.get("button").contains("Удалить").click();
     cy.get("@circleElements")
       .last()
       .parent()
-      .should("have.css", "border-color", "rgb(210, 82, 225)");
+      .should("have.css", "border-color", colorChanging);
     cy.get("@circleElements").should("have.length", i - 2);
 
     cy.get("button").contains("Очистить").click();

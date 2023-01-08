@@ -1,4 +1,6 @@
 import { ElementStates } from "../../types";
+import { DELAY_IN_MS, SHORT_DELAY_IN_MS } from "../../constants/delays";
+
 export class LinkedListNode<T> {
   value?: T;
   state: ElementStates;
@@ -45,28 +47,34 @@ export class LinkedList<T> implements IList<T> {
     }
     setTimeout(() => {
       this.head && (this.head.state = ElementStates.Default);
-    }, 500);
+    }, SHORT_DELAY_IN_MS);
   };
   addToTail = (element: T, state: ElementStates): void => {
     let nodeTemp = new LinkedListNode(element);
     if (this.tail === null) {
+      nodeTemp.next = this.head;
       this.head = nodeTemp;
       this.tail = this.head;
       this.tail.state = state;
     } else {
       this.tail && (this.tail.next = nodeTemp);
-      this.tail = nodeTemp;
+      this.tail.next && (this.tail = this.tail.next);
       this.tail.state = state;
     }
     setTimeout(() => {
       this.tail && (this.tail.state = ElementStates.Default);
-    }, 500);
+    }, SHORT_DELAY_IN_MS);
   };
   delFromTop = (): void => {
     if (this.head === null) {
       return;
     } else {
-      this.head && (this.head = this.head.next);
+      if (this.head === this.tail) {
+        this.head = null;
+        this.tail = null;
+      } else {
+        this.head && (this.head = this.head.next);
+      }
     }
   };
   delFromTail = (): void => {
@@ -79,52 +87,61 @@ export class LinkedList<T> implements IList<T> {
       this.tail = null;
       return;
     }
-    while (nodeTemp && nodeTemp !== null && nodeTemp.next !== this.tail) {
+    while (nodeTemp && nodeTemp.next !== this.tail) {
       nodeTemp = nodeTemp.next;
     }
     if (nodeTemp) {
+      nodeTemp.next = null;
       this.tail = nodeTemp;
-      this.tail.next = null;
     }
   };
 
-  addByIndex = (element: T, index: number, state?: ElementStates): void => {
-    if (this.head === null && index > 0) {
-      return;
-    }
+  addByIndex = (element: T, index: number): void => {
     let nodeTemp = new LinkedListNode(element);
-    if (this.head === null) {
-      this.head = nodeTemp;
-      state && (this.head.state = state);
-      this.tail = this.head;
-    } else {
-      let i = 0;
-      this.head && (nodeTemp.next = this.head);
-      while (i < index - 1) {
-        nodeTemp.next?.next && (nodeTemp.next = nodeTemp.next.next);
-        i++;
-      }
-      let tempNodeSecond = nodeTemp.next?.next;
-      let tempNodeFirst = nodeTemp.next;
-      nodeTemp.next && (nodeTemp.next = tempNodeSecond);
-      tempNodeFirst && (tempNodeFirst.next = nodeTemp);
-      setTimeout(() => {}, 500);
+
+    switch (index) {
+      case 0:
+        if (this.head === null) {
+          this.head = nodeTemp;
+          this.tail = this.head;
+        } else {
+          nodeTemp.next = this.head;
+          this.head = nodeTemp;
+        }
+        break;
+      default:
+        let i = 0;
+        this.head && (nodeTemp.next = this.head);
+        while (i < index - 1) {
+          nodeTemp.next?.next && (nodeTemp.next = nodeTemp.next.next);
+          i++;
+        }
+        let tempNodeSecond = nodeTemp.next?.next;
+        let tempNodeFirst = nodeTemp.next;
+        nodeTemp.next && (nodeTemp.next = tempNodeSecond);
+        tempNodeFirst && (tempNodeFirst.next = nodeTemp);
     }
   };
-  delByIndex = (index: any): void => {
-    let tempNode = this.head;
-    if (this.head === null && index > 0) {
-      return;
-    }
-    if (this.head === null) {
-      return;
-    } else {
-      let i = 0;
-      while (i < index - 1) {
-        tempNode = tempNode?.next;
-        i++;
-      }
-      tempNode && (tempNode.next = tempNode?.next?.next);
+
+  delByIndex = (index: number): void => {
+    switch (index) {
+      case 0:
+        this.head = this.head?.next;
+        this.head === null && (this.tail = null);
+        break;
+      case 1:
+        this.head && (this.head.next = this.head?.next?.next);
+        this.head && this.head.next === null && (this.tail = this.head);
+        break;
+      default:
+        let i = 0;
+        let tempNode = this.head;
+        while (i < index - 1) {
+          tempNode = tempNode?.next;
+          i++;
+        }
+        tempNode && tempNode.next === this.tail && (this.tail = tempNode);
+        tempNode && (tempNode.next = tempNode?.next?.next);
     }
   };
 }

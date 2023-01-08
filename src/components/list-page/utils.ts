@@ -1,9 +1,10 @@
 import {LinkedListNode} from "./list"
 import { ElementStates} from "../../types";
 
-export const returnArray = (head: LinkedListNode<string>) => {
-    
-    let arr: {value: string, state: ElementStates}[] = [{value: "", state: ElementStates.Default}] ;
+export const returnArray = (head: LinkedListNode<string> | null | undefined) => {
+  let arr: {value: string, state: ElementStates}[] = [{value: "", state: ElementStates.Default}] ;
+  if (!head) {return arr}
+
     let i = 0;
     let circuitBreaker;
     do {

@@ -19,8 +19,6 @@ const { page, buttonsBox, box, radio, button, visualizedArray, elementArr } =
   style;
 
 export const SortingPage: React.FC = () => {
-  const [isLoader, setIsLoader] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(false);
   const [arrNumbers, setArrNumbers] = useState<ElementNumberArray[]>([]);
   const [buttonState, setBattonState] = useState<ButtonState>({
     ascending: {

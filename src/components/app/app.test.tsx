@@ -1,8 +1,20 @@
-import React from "react";
-import { render, screen } from "@testing-library/react";
 import App from "./app";
-test("renders learn react link", () => {
+import { render, screen } from "@testing-library/react";
+import renderer from "react-test-renderer";
+import styles from "./main-page.module.css";
+
+
+describe('<<<<<App>>>>>', () => {
+  
+  it("!!!!!!renders App", () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  const linkElement1 = screen.getByText("им. Фибоначчи");
+  const tree = renderer
+  .create( <div className={`${styles.card} ${styles.string}`} />)
+  .toJSON();
+  expect(tree).toMatchSnapshot();
+  expect(linkElement1).toBeInTheDocument();
 });
+
+
+})

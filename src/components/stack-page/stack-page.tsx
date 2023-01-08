@@ -6,7 +6,8 @@ import { Circle } from "../ui/circle/circle";
 import { DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates, ButtonState } from "../../types";
 import style from "./stack-page.module.css";
-import { Stack, ElementArray, Node } from "./stack";
+import { Stack, ElementArray } from "./stack";
+import { flushSync } from "react-dom";
 
 export const StackPage: React.FC = () => {
   const { page, input, node, clear, button, nodeBox } = style;
@@ -32,12 +33,15 @@ export const StackPage: React.FC = () => {
     nodeTemp && nodeTemp.state && (nodeTemp.state = ElementStates.Default);
     const arrTemp = stack.toArray();
 
-    setrenderArray(arrTemp);
+    flushSync(() => {
+      setrenderArray(arrTemp);
+    });
     setTimeout(() => {
       stack.arr.length >= 1 &&
         (stack.arr[stack.arr.length - 1].state = ElementStates.Default);
-
-      setrenderArray([...arrTemp]);
+      flushSync(() => {
+        setrenderArray([...arrTemp]);
+      });
     }, DELAY_IN_MS);
   };
 

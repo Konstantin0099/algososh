@@ -19,8 +19,6 @@ const { page, buttonsBox, box, radio, button, visualizedArray, elementArr } =
   style;
 
 export const SortingPage: React.FC = () => {
-  // const [isLoader, setIsLoader] = useState(false);
-  // const [isDisabled, setIsDisabled] = useState(false);
   const [arrNumbers, setArrNumbers] = useState<ElementNumberArray[]>([]);
   const [buttonState, setBattonState] = useState<ButtonState>({
     ascending: {
@@ -56,7 +54,6 @@ export const SortingPage: React.FC = () => {
     j: number,
     min: { number: number; index: number; indexStart: number }
   ) => {
-    // console.log("selection")
     j <= arr.length - 1 && (arr[j].state = ElementStates.Changing);
     min.indexStart + 1 < j && (arr[j - 1].state = ElementStates.Default);
     setArrNumbers([...arr]);
@@ -113,7 +110,6 @@ export const SortingPage: React.FC = () => {
     j: number,
     min: { indexFinish: number }
   ) => {
-    // console.log("bubble")
     const i = j - 1;
     j <= min.indexFinish && (arr[j].state = ElementStates.Changing);
     arr[i].state = ElementStates.Changing;
@@ -157,7 +153,6 @@ export const SortingPage: React.FC = () => {
     i: number,
     j: number
   ) => {
-    // console.log("sort", "direction=", direction, "sortingMetod=", sortingMetod)
     if (j > arr.length - 1) return;
     arr[i].state = ElementStates.Changing;
     arr[j].state = ElementStates.Changing;

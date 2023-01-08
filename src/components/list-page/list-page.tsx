@@ -8,6 +8,7 @@ import { ElementStates, SearchIndex } from "../../types";
 import style from "./list-page.module.css";
 import { LinkedListNode, LinkedList } from "./list";
 import { returnArray, rndArr } from "./utils";
+import { flushSync } from "react-dom";
 
 export const ListPage: React.FC = () => {
   const { input, buttonsBox, node, button, nodeBox, buttonInd } = style;
@@ -58,7 +59,6 @@ export const ListPage: React.FC = () => {
         add: { isDisabled: true },
         addByIndex: { isDisabled: true },
       });
-      console.log("inputChangeValue", buttonState)
     e.target.value &&
       setBattonState({
         ...buttonState,
@@ -113,10 +113,13 @@ export const ListPage: React.FC = () => {
         linkedList.head && setRenderArray(returnArray(linkedList.head));
         setBattonState({
           ...buttonState,
-          del: renderArray[0]?.value === "" ? { isDisabled: true } : { isDisabled: false },
+          del:
+            renderArray[0]?.value === ""
+              ? { isDisabled: true }
+              : { isDisabled: false },
           add: { isDisabled: true },
           addByIndex: { isDisabled: true },
-          delByIndex: inputIndex ? {isDisabled: false}  : { isDisabled: true },
+          delByIndex: inputIndex ? { isDisabled: false } : { isDisabled: true },
         });
         setIsDisabled(false);
       }, DELAY_IN_MS);
@@ -125,7 +128,6 @@ export const ListPage: React.FC = () => {
 
   const addToTail = (value: string) => {
     setIsDisabled(true);
-    console.log("addToTail", buttonState)
     setBattonState({
       ...buttonState,
       isLoader: {
@@ -143,13 +145,12 @@ export const ListPage: React.FC = () => {
       setSearchIndexAdd({});
       setTimeout(() => {
         linkedList.head && setRenderArray(returnArray(linkedList.head));
-        console.log("addToTail", buttonState)
         setBattonState({
           ...buttonState,
           del: { isDisabled: false },
           add: { isDisabled: true },
           addByIndex: { isDisabled: true },
-          delByIndex: inputIndex ? {isDisabled: false}  : { isDisabled: true }
+          delByIndex: inputIndex ? { isDisabled: false } : { isDisabled: true },
         });
         setIsDisabled(false);
       }, DELAY_IN_MS);
@@ -158,7 +159,6 @@ export const ListPage: React.FC = () => {
 
   const delFromTop = () => {
     setIsDisabled(true);
-    console.log("delFromTop", buttonState)
     setBattonState({
       ...buttonState,
       isLoader: {
@@ -177,16 +177,20 @@ export const ListPage: React.FC = () => {
       setTimeout(() => {
         linkedList.head && setRenderArray(returnArray(linkedList.head));
       }, DELAY_IN_MS);
-      console.log("delFromTop", buttonState)
       setBattonState({
         ...buttonState,
-        del:  (linkedList.head?.value === "") ? { isDisabled: true } : { isDisabled: false },
-        add: inputValue ? {isDisabled: false}  : { isDisabled: true },
-        addByIndex: (inputIndex && inputValue) ? {isDisabled: false}  : { isDisabled: true },
-        delByIndex: inputIndex ? {isDisabled: false}  : { isDisabled: true }
+        del:
+          linkedList.head?.value === ""
+            ? { isDisabled: true }
+            : { isDisabled: false },
+        add: inputValue ? { isDisabled: false } : { isDisabled: true },
+        addByIndex:
+          inputIndex && inputValue
+            ? { isDisabled: false }
+            : { isDisabled: true },
+        delByIndex: inputIndex ? { isDisabled: false } : { isDisabled: true },
       });
       setIsDisabled(false);
-      console.log("delFromTop", buttonState)
       renderArray.length <= 1 &&
         setBattonState({ ...buttonState, del: { isDisabled: true } });
     }, DELAY_IN_MS);
@@ -194,7 +198,6 @@ export const ListPage: React.FC = () => {
 
   const delFromTail = () => {
     setIsDisabled(true);
-    console.log("delFromTail", buttonState)
     setBattonState({
       ...buttonState,
       isLoader: {
@@ -214,16 +217,20 @@ export const ListPage: React.FC = () => {
       setTimeout(() => {
         linkedList.head && setRenderArray(returnArray(linkedList.head));
       }, DELAY_IN_MS);
-      console.log("delFromTail", buttonState)
       setBattonState({
         ...buttonState,
-        del:  (linkedList.head?.value === "") ? { isDisabled: true } : { isDisabled: false },
-        add: inputValue ? {isDisabled: false}  : { isDisabled: true },
-        addByIndex: (inputIndex && inputValue) ? {isDisabled: false}  : { isDisabled: true },
-        delByIndex: inputIndex ? {isDisabled: false}  : { isDisabled: true }
+        del:
+          linkedList.head?.value === ""
+            ? { isDisabled: true }
+            : { isDisabled: false },
+        add: inputValue ? { isDisabled: false } : { isDisabled: true },
+        addByIndex:
+          inputIndex && inputValue
+            ? { isDisabled: false }
+            : { isDisabled: true },
+        delByIndex: inputIndex ? { isDisabled: false } : { isDisabled: true },
       });
       setIsDisabled(false);
-      console.log("delFromTail", buttonState)
       renderArray.length <= 1 &&
         setBattonState({ ...buttonState, del: { isDisabled: true } });
     }, DELAY_IN_MS);
@@ -238,53 +245,64 @@ export const ListPage: React.FC = () => {
   ) => {
     value && (searchIndex.index = i);
     i >= 0 && i <= index && (renderArray[i].state = ElementStates.Modified);
-    setRenderArray([...renderArray]);
+
+    flushSync(() => {
+      setRenderArray([...renderArray]);
+    });
     if (i <= index)
       setTimeout(() => {
-        (i < index) && renderSearchIndex(i+1, index, searchIndex, set, value);
+        i < index && renderSearchIndex(i + 1, index, searchIndex, set, value);
         if (i === index) {
           let arrRender: {
-            value: string,
-            state: ElementStates
+            value: string;
+            state: ElementStates;
           }[];
           arrRender = returnArray(linkedList.head);
-          setTimeout(() => {
-            if (!value) {
-              renderArray[i].state = ElementStates.Modified;
-              searchIndex.value = renderArray[i].value;
-              renderArray[i].value = "";
-              searchIndex.index = i;
+          if (!value) {
+            renderArray[i].state = ElementStates.Modified;
+            searchIndex.value = renderArray[i].value;
+            renderArray[i].value = "";
+            searchIndex.index = i;
+            flushSync(() => {
               setRenderArray([...renderArray]);
-              console.log("renderSearchIndex 1", {...buttonState})
-              setBattonState({
-                del:  (linkedList.head?.value === "") ? { isDisabled: true } : { isDisabled: false },
-                add: inputValue ? {isDisabled: false}  : { isDisabled: true },
-                addByIndex: { isDisabled: true },
-                delByIndex: { isDisabled: true },
-                isLoader: { ...buttonState.isLoader, delByIndex: false },
-              });
-            } else {
-              set({});
-              arrRender[i].state = ElementStates.Modified;
-              setRenderArray([...arrRender]);
-              console.log("renderSearchIndex 2", buttonState)
-              setBattonState({
-                ...buttonState,
-                del:  (linkedList.head?.value === "") ? { isDisabled: true } : { isDisabled: false },
-                add: inputValue ? {isDisabled: false}  : { isDisabled: true },
-                addByIndex: { isDisabled: true },
-                delByIndex: { isDisabled: true },
-                isLoader: { ...buttonState.isLoader, addByIndex: false },
-              });
-            }
-            setIsDisabled(false);
-          }, DELAY_IN_MS/5);
-          setTimeout(() => {
-            arrRender[i].state = ElementStates.Default;
-            setRenderArray([...arrRender]);
-            
+            });
+            setBattonState({
+              del:
+                linkedList.head?.value === ""
+                  ? { isDisabled: true }
+                  : { isDisabled: false },
+              add: inputValue ? { isDisabled: false } : { isDisabled: true },
+              addByIndex: { isDisabled: true },
+              delByIndex: { isDisabled: true },
+              isLoader: { ...buttonState.isLoader, delByIndex: false },
+            });
+          } else {
             set({});
-          }, DELAY_IN_MS*1.25);
+            arrRender[i].state = ElementStates.Modified;
+            flushSync(() => {
+              setRenderArray([...arrRender]);
+            });
+            setBattonState({
+              ...buttonState,
+              del:
+                linkedList.head?.value === ""
+                  ? { isDisabled: true }
+                  : { isDisabled: false },
+              add: inputValue ? { isDisabled: false } : { isDisabled: true },
+              addByIndex: { isDisabled: true },
+              delByIndex: { isDisabled: true },
+              isLoader: { ...buttonState.isLoader, addByIndex: false },
+            });
+          }
+          setIsDisabled(false);
+          setTimeout(() => {
+            i < arrRender.length &&
+              (arrRender[i].state = ElementStates.Default);
+            flushSync(() => {
+              setRenderArray([...arrRender]);
+            });
+            set({});
+          }, DELAY_IN_MS);
         }
       }, DELAY_IN_MS);
   };

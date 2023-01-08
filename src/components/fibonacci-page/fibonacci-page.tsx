@@ -5,6 +5,7 @@ import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
 import { DELAY_IN_MS } from "../../constants/delays";
 import style from "./fibonacci-page.module.css";
+import { flushSync } from "react-dom";
 const { page, input, numberClass, numbers } = style;
 
 export const FibonacciPage: React.FC = () => {
@@ -20,7 +21,9 @@ export const FibonacciPage: React.FC = () => {
     index: number
   ) => {
     arr = [...arr, s];
-    setArrNumbers(arr);
+    flushSync(() => {
+      setArrNumbers(arr);
+    });
     if (index < q) {
       let sum = arr[index - 1] + arr[index];
       index++;
@@ -31,20 +34,22 @@ export const FibonacciPage: React.FC = () => {
       setIsDisabled(true);
       setIsLoader(false);
     }
-    setArrNumbers(arr);
+    flushSync(() => {
+      setArrNumbers(arr);
+    });
   };
 
   const onClickButton = useMemo(
     () => (q: number | string) => {
       setIsLoader(true);
       const arr: number[] = [];
-        arr[0] = 1;
-        if (q > 0 && q <= 19) {
-          setTimeout(() => {
-            lineUp(arr, q, 1, 1);
-          }, DELAY_IN_MS);
-        }
-        setArrNumbers(arr);
+      arr[0] = 1;
+      if (q > 0 && q <= 19) {
+        setTimeout(() => {
+          lineUp(arr, q, 1, 1);
+        }, DELAY_IN_MS);
+      }
+      setArrNumbers(arr);
       return;
     },
     [setIsLoader, setInputNumber, setArrNumbers, lineUp]
@@ -52,14 +57,18 @@ export const FibonacciPage: React.FC = () => {
   const rememberNumber = useMemo(
     () => (e: any) => {
       const valueInput = e.target.value;
-      if (valueInput >= 0 && valueInput <= 19 && Number.isInteger(Number(valueInput))) {
-      setInputNumber(valueInput);
-      if (valueInput) {
-        setIsDisabled(false);
-      } else {
-        setIsDisabled(true);
+      if (
+        valueInput >= 0 &&
+        valueInput <= 19 &&
+        Number.isInteger(Number(valueInput))
+      ) {
+        setInputNumber(valueInput);
+        if (valueInput) {
+          setIsDisabled(false);
+        } else {
+          setIsDisabled(true);
+        }
       }
-    }
     },
     [setInputNumber, setIsDisabled]
   );

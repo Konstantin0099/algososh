@@ -1,8 +1,14 @@
 import { DELAY_IN_MS } from "../../../src/constants/delays";
 import { testUrl } from "../../../src/constants/urls";
-import { colorChanging, colorDefault, colorModified } from "../../../src/constants/colors";
+import {
+  colorChanging,
+  colorDefault,
+  colorModified,
+} from "../../../src/constants/colors";
 
 describe("service is available", function () {
+  const circles = "li p[class*=text_type_circle]";
+
   it("should be available on localhost:3000", function () {
     cy.visit(testUrl);
   });
@@ -46,15 +52,12 @@ describe("service is available", function () {
       .as("btnDelInTail")
       .should("be.enabled");
 
-    cy.get("li p[class*=text_type_circle]")
+    cy.get(circles)
       .parent()
       .as("circleElement")
       .should("have.css", "border-color", colorDefault)
       .and("have.length", defaultListlength);
-    cy.get("li p[class*=text_type_circle]")
-      .parent()
-      .find("")
-      .should("have.length", 0);
+    cy.get(circles).parent().find("").should("have.length", 0);
     cy.get("li div.text_type_input.mb-4")
       .as("heads")
       .contains("head")
@@ -74,13 +77,15 @@ describe("service is available", function () {
       .contains("NN")
       .parent()
       .should("have.css", "border-color", colorChanging);
-    cy.get("li p[class*=text_type_circle]").parent().should("have.length", defaultListlength+1);
-    cy.tick(DELAY_IN_MS);
-    cy.get("li p[class*=text_type_circle]")
+    cy.get(circles)
       .parent()
-      .should("have.length", defaultListlength+1)
+      .should("have.length", defaultListlength + 1);
+    cy.tick(DELAY_IN_MS);
+    cy.get(circles)
+      .parent()
+      .should("have.length", defaultListlength + 1)
       .last()
-      .and("have.css", "border-color", colorModified);
+      .and("have.css", "border-color", colorDefault);
     cy.tick(DELAY_IN_MS);
 
     cy.get("@inputText").type("NN");
@@ -90,7 +95,7 @@ describe("service is available", function () {
       .contains("NN")
       .parent()
       .should("have.css", "border-color", colorChanging);
-    cy.get("li p[class*=text_type_circle]")
+    cy.get(circles)
       .parent()
       .should("have.length", defaultListlength + 2)
       .first()
@@ -98,98 +103,90 @@ describe("service is available", function () {
     cy.tick(DELAY_IN_MS);
     cy.get("@heads").should("not.have.text", "NN");
     cy.tick(DELAY_IN_MS);
-    cy.get("li p[class*=text_type_circle]")
+    cy.get(circles)
       .parent()
-      .should("have.length", defaultListlength+2)
+      .should("have.length", defaultListlength + 2)
       .and("have.css", "border-color", colorDefault);
 
     cy.get("@btnDelInHead").should("be.enabled").click();
-    cy.get("li p[class*=text_type_circle]")
+    cy.get(circles)
       .parent()
       .should("have.length", defaultListlength + 3)
       .first()
       .should("have.text", "");
-    cy.get("li p[class*=text_type_circle]")
+    cy.get(circles)
       .parent()
       .eq(1)
       .should("have.css", "border-color", colorChanging)
       .and("have.text", "NN");
     cy.tick(DELAY_IN_MS);
-    cy.get("li p[class*=text_type_circle]").parent().should("have.length", defaultListlength + 1);
+    cy.get(circles)
+      .parent()
+      .should("have.length", defaultListlength + 1);
 
     cy.get("@btnDelInTail").should("be.enabled").click();
-    cy.get("li p[class*=text_type_circle]")
+    cy.get(circles)
       .parent()
-      .should("have.length", defaultListlength+2)
+      .should("have.length", defaultListlength + 2)
       .last()
       .should("have.text", "NN")
       .and("have.css", "border-color", colorChanging);
-    cy.get("li p[class*=text_type_circle]")
-      .parent()
-      .eq(5)
-      .should("have.text", "");
+    cy.get(circles).parent().eq(5).should("have.text", "");
     cy.tick(DELAY_IN_MS);
-    cy.get("li p[class*=text_type_circle]").parent().should("have.length", defaultListlength);
+    cy.get(circles).parent().should("have.length", defaultListlength);
 
-    let indexAddTest = 3;
+    let indexAddTest = 4;
     cy.get("@inputText").type("NN");
     cy.get("@inputIndex").type(indexAddTest);
     cy.get("@btnAddInIndex").should("be.enabled").click();
     let k = 1;
 
-   
-    let color = colorDefault;
-
     for (let j = 0; j <= indexAddTest; j++) {
-      console.log(j === indexAddTest, j, k);
-      cy.get("li p[class*=text_type_circle]")
+      cy.get(circles)
         .parent()
         .should("have.length", 6)
         .eq(j)
         .should("have.text", "NN")
         .and("have.css", "border-color", colorChanging);
-      cy.get("li p[class*=text_type_circle]")
+      cy.get(circles)
         .parent()
-        .eq(k)
+        .eq(j + 1)
         .and("have.css", "border-color", colorModified);
-      // color = colorModified;
+
       cy.tick(DELAY_IN_MS);
+
       if (j === indexAddTest) {
-        cy.get("li p[class*=text_type_circle]")
-          .parent()
-          .eq(j)
-          .and("have.css", "border-color", colorChanging);
-        cy.get("li p[class*=text_type_circle]")
-          .parent()
-          .eq(k)
-          .and("have.css", "border-color", colorModified);
         cy.tick(DELAY_IN_MS);
+
+        cy.get(circles)
+          .parent()
+          .should("have.length", 6)
+          .eq(j)
+          .should("have.text", "NN")
+          .and("have.css", "border-color", colorDefault);
       }
       k = j;
     }
 
-    let indexDelTest = 3;
+    let indexDelTest = 5;
     cy.get("@inputIndex").type(indexDelTest);
     cy.get("@btnDelInIndex").should("be.enabled").click();
-    cy.tick(DELAY_IN_MS);
-    cy.get("li p[class*=text_type_circle]").parent().should("have.length", 6);
+    cy.get(circles).parent().should("have.length", 6);
     for (let j = 0; j <= indexDelTest; j++) {
-      console.log(j === indexDelTest, j, k);
-      cy.get("li p[class*=text_type_circle]")
+      cy.get(circles)
         .parent()
         .eq(j)
         .should("have.css", "border-color", colorModified);
       if (j === indexDelTest) {
-        cy.get("li p[class*=text_type_circle]")
+        cy.tick(DELAY_IN_MS);
+        cy.get(circles)
           .parent()
           .eq(j + 1)
           .should("have.css", "border-color", colorChanging);
       }
-      cy.tick(DELAY_IN_MS*1.25);
+      cy.tick(DELAY_IN_MS);
     }
-    cy.get("li p[class*=text_type_circle]")
-      .parent()
-      .should("have.css", "border-color", colorDefault)
-      .and("have.length", 5);
+    cy.tick(DELAY_IN_MS);
+    cy.get(circles).parent().should("have.length", 5);
   });
 });

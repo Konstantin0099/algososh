@@ -52,7 +52,7 @@ describe("service is available", function () {
         .parent()
         .should("have.css", "border-color", colorChanging)
         .and("have.text", stringStart[i]);
-      cy.tick(i === 0 ? 2000 : 1000);
+      cy.tick(i === 0 ? DELAY_IN_MS*2 : DELAY_IN_MS);
       cy.get("@circleElements")
         .eq(i)
         .parent()
@@ -71,6 +71,7 @@ describe("service is available", function () {
     cy.get("button").contains("Рассчитать").click();
     let fibonacci = 1;
     let chin = 0;
+  
     for (let i = 0; i <= 19; i++) {
       cy.get("li p[class*=text_type_circle]").as("circleElements");
       cy.get("@circleElements")
@@ -85,7 +86,7 @@ describe("service is available", function () {
         chin = fibonacci;
       }
 
-      cy.tick(DELAY_IN_MS);
+      cy.tick(DELAY_IN_MS*2);
     }
   });
 });

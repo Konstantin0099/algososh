@@ -59,21 +59,16 @@ describe("<<<<<StringComponent>>>>>>", () => {
     btn = initializingNewData(cont, elementInput, "RTY");
     expect(btn.queryButton).toBe(null);
     await asyncWaitFor(cont, btn.elementButton);
-    checTurn(document.getElementsByClassName("text_type_circle"), [
-      "Y",
-      "T",
-      "R",
-    ]);
+    checTurn(circList, ["Y", "T", "R"]);
 
     btn = initializingNewData(cont, elementInput, "RT");
     expect(btn.queryButton).toBe(null);
     await asyncWaitFor(cont, btn.elementButton);
-    checTurn(document.getElementsByClassName("text_type_circle"), ["T", "R"]);
-
+    checTurn(circList, ["T", "R"]);
     btn = initializingNewData(cont, elementInput, "T");
     expect(btn.queryButton).toBe(null);
     await asyncWaitFor(cont, btn.elementButton);
-    checTurn(document.getElementsByClassName("text_type_circle"), ["T"]);
+    checTurn(circList, ["T"]);
 
     btn = initializingNewData(cont, elementInput, "");
     expect(btn.queryButton).not.toBe(null);

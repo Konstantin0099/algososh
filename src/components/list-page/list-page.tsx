@@ -288,7 +288,7 @@ export const ListPage: React.FC = () => {
                 linkedList.head?.value === ""
                   ? { isDisabled: true }
                   : { isDisabled: false },
-              add: inputValue ? { isDisabled: false } : { isDisabled: true },
+              add: {isDisabled: true },
               addByIndex: { isDisabled: true },
               delByIndex: { isDisabled: true },
               isLoader: { ...buttonState.isLoader, addByIndex: false },
@@ -343,6 +343,7 @@ export const ListPage: React.FC = () => {
           value={inputValue}
           isLimitText
           onChange={inputChangeValue}
+          disabled={isDisabled}
         />
         <Button
           text="Добавить в head"
@@ -382,6 +383,7 @@ export const ListPage: React.FC = () => {
           value={inputIndex}
           isLimitText
           onChange={inputChangeIndex}
+          disabled={isDisabled}
         />
         <Button
           text="Добавить по индексу"
